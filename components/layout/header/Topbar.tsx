@@ -3,7 +3,7 @@ import Logo from "./Logo";
 import MobileNav from "./MobileNav";
 import { topbarNavItems } from "@/constants";
 import Search from "./Search";
-import { Button } from "@/components/ui/button";
+import SignInButton from "./SignInButton";
 
 const Topbar = () => {
   return (
@@ -18,7 +18,7 @@ const Topbar = () => {
         <Logo />
         <ul className="hidden items-center gap-12 md:flex">
           {topbarNavItems.map((item) => (
-            <li key={item.href} className="text-base">
+            <li key={item.href} className="text-sm">
               <Link href={item.href}>{item.label}</Link>
             </li>
           ))}
@@ -27,9 +27,7 @@ const Topbar = () => {
       {/* search and sign in/register buttons */}
       <div className="flex items-center gap-2 md:gap-8">
         <Search />
-        <Button variant="outline">
-          ورود
-        </Button>
+        <SignInButton />
       </div>
     </div>
   );

@@ -3,8 +3,8 @@ import Bottombar from "./Bottombar";
 
 const Header = () => {
   return (
-    <header>
-      <nav>
+    <header className="w-full">
+      <nav className="w-full">
         <Topbar />
         <Bottombar />
       </nav>
