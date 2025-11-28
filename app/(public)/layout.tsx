@@ -8,9 +8,11 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col px-4 md:px-0">
-      <Header />
-      <main className="flex-1">{children}</main>
+    <div className="flex min-h-screen flex-col">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-4 md:px-0">
+        <Header />
+        <main className="flex-1">{children}</main>
+      </div>
       <Footer />
     </div>
   );
