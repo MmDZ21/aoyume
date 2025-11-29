@@ -3,7 +3,14 @@ import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Navigation } from "swiper/modules";
-import { ChevronLeft, ChevronRight, Plus, Star, Calendar, Clock } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Star,
+  Calendar,
+  Clock,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   HoverCard,
@@ -27,68 +34,75 @@ interface MediaItem {
 
 // Mock data based on existing images in the project
 const items: MediaItem[] = [
-  { 
-    id: 1, 
-    title: "FREE GUY", 
+  {
+    id: 1,
+    title: "FREE GUY",
     image: "/images/aot.jpg",
     rating: 8.9,
     year: 2021,
     duration: "120 min",
-    description: "A bank teller discovers he is actually a background player in an open-world video game, and decides to become the hero of his own story."
+    description:
+      "A bank teller discovers he is actually a background player in an open-world video game, and decides to become the hero of his own story.",
   },
-  { 
-    id: 2, 
-    title: "FREE GUY", 
+  {
+    id: 2,
+    title: "FREE GUY",
     image: "/images/frieren.jpg",
     rating: 9.1,
     year: 2023,
     duration: "24 min",
-    description: "Elven mage Frieren and her fellow adventurers have defeated the Demon King and brought peace to the land."
+    description:
+      "Elven mage Frieren and her fellow adventurers have defeated the Demon King and brought peace to the land.",
   },
-  { 
-    id: 3, 
-    title: "FREE GUY", 
+  {
+    id: 3,
+    title: "FREE GUY",
     image: "/images/jujutsu.jpg",
     rating: 8.7,
     year: 2020,
     duration: "24 min",
-    description: "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed himself."
+    description:
+      "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed himself.",
   },
-  { 
-    id: 4, 
-    title: "FREE GUY", 
+  {
+    id: 4,
+    title: "FREE GUY",
     image: "/images/aot.jpg",
     rating: 8.9,
     year: 2021,
     duration: "120 min",
-    description: "A bank teller discovers he is actually a background player in an open-world video game."
+    description:
+      "A bank teller discovers he is actually a background player in an open-world video game.",
   },
-  { 
-    id: 5, 
-    title: "FREE GUY", 
+  {
+    id: 5,
+    title: "FREE GUY",
     image: "/images/frieren.jpg",
     rating: 9.1,
     year: 2023,
     duration: "24 min",
-    description: "Elven mage Frieren and her fellow adventurers have defeated the Demon King."
+    description:
+      "Elven mage Frieren and her fellow adventurers have defeated the Demon King.",
   },
-  { 
-    id: 6, 
-    title: "FREE GUY", 
+  {
+    id: 6,
+    title: "FREE GUY",
     image: "/images/jujutsu.jpg",
     rating: 8.7,
     year: 2020,
     duration: "24 min",
-    description: "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed himself."
+    description:
+      "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed himself.",
   },
-  { 
-    id: 7, 
-    title: "FREE GUY", 
+  {
+    id: 7,
+    title: "FREE GUY",
     image: "/images/aot.jpg",
     rating: 8.9,
     year: 2021,
     duration: "120 min",
-    description: "A bank teller discovers he is actually a background player in an open-world video game."
+    description:
+      "A bank teller discovers he is actually a background player in an open-world video game.",
   },
 ];
 
@@ -104,17 +118,19 @@ const MediaCarousel = ({
   const swiperRef = useRef<SwiperType>(null);
 
   return (
-    <div className="w-full space-y-4 py-8">
+    <div className="w-full space-y-4">
       {/* Header Section */}
       <div className="flex items-center justify-between gap-4">
         {/* Right Side: Title (RTL: Right is start) */}
         <div className="flex items-center gap-2">
           <div className="bg-primary h-6 w-1 rounded-2xl"></div>
-          <h2 className="text-lg font-bold text-white md:text-xl">{title}</h2>
+          <h2 className="text-primary dark:text-foreground text-sm font-bold md:text-xl">
+            {title}
+          </h2>
         </div>
 
         {/* Middle: Dashed Line */}
-        <div className="hidden h-px flex-1 border-t border-dashed border-white/20 sm:block" />
+        <div className="border-foreground/80 hidden h-px flex-1 border-t border-dashed sm:block" />
 
         {/* Left Side: Buttons (RTL: Left is end) */}
         <div className="flex items-center gap-2">
@@ -177,10 +193,7 @@ const MediaCarousel = ({
           className="overflow-visible!" // Allow overflow for aesthetic
         >
           {items.map((item) => (
-            <SwiperSlide
-              key={item.id}
-              className="overflow-visible"
-            >
+            <SwiperSlide key={item.id} className="overflow-visible">
               <HoverCard openDelay={200} closeDelay={200}>
                 <HoverCardTrigger asChild>
                   <div className="group relative aspect-2/3 w-full cursor-pointer overflow-hidden rounded-2xl bg-gray-900">
@@ -191,11 +204,11 @@ const MediaCarousel = ({
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="bg-linear-to-t from-black/90 via-black/20 to-transparent absolute inset-0 opacity-60 transition-opacity duration-300 group-hover:opacity-80" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-80" />
 
                     {/* Content */}
                     <div className="absolute inset-x-0 bottom-0 p-4">
-                      <h3 className="shadow-black drop-shadow-lg mb-6 text-center text-xl font-bold tracking-wider text-white uppercase">
+                      <h3 className="mb-6 text-center text-xl font-bold tracking-wider text-white uppercase shadow-black drop-shadow-lg">
                         {item.title}
                       </h3>
 
@@ -211,9 +224,9 @@ const MediaCarousel = ({
                     </div>
                   </div>
                 </HoverCardTrigger>
-                <HoverCardContent 
-                  className="w-72 border-white/10 bg-gray-900/95 text-white backdrop-blur-md md:w-80 rounded-2xl" 
-                  side="left" 
+                <HoverCardContent
+                  className="w-72 rounded-2xl border-white/10 bg-gray-900/95 text-white backdrop-blur-md md:w-80"
+                  side="left"
                   align="start"
                   sideOffset={-10}
                 >
@@ -225,7 +238,7 @@ const MediaCarousel = ({
                         {item.rating}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-4 text-xs text-gray-300">
                       <div className="flex items-center gap-1">
                         <Calendar className="size-3" />
@@ -249,7 +262,10 @@ const MediaCarousel = ({
                         <Plus className="mr-1 size-4" />
                         افزودن به لیست
                       </Button>
-                      <Button variant="outline" className="h-9 flex-1 rounded-xl border-white/20 bg-transparent text-xs hover:bg-white/10 hover:text-white md:text-sm">
+                      <Button
+                        variant="outline"
+                        className="h-9 flex-1 rounded-xl border-white/20 bg-transparent text-xs hover:bg-white/10 hover:text-white md:text-sm"
+                      >
                         مشاهده جزئیات
                       </Button>
                     </div>

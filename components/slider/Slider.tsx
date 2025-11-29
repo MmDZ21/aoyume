@@ -55,38 +55,39 @@ const Slider = () => {
         loop={true}
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id} className="relative h-full w-full">
+          <SwiperSlide
+            key={slide.id}
+            className="relative h-full w-full rounded-2xl"
+          >
             {/* Background Image */}
             <div
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 rounded-2xl bg-cover bg-center"
               style={{ backgroundImage: `url(${slide.image})` }}
             >
               {/* Gradient Overlay */}
-              <div className="from-primary md:from-primary absolute inset-0 bg-linear-to-t via-transparent to-transparent md:bg-linear-to-l md:to-transparent" />
+              <div className="absolute inset-0 rounded-2xl">
+                <div className="from-primary absolute inset-0 rounded-2xl bg-linear-to-t to-transparent md:bg-linear-to-l"></div>
+              </div>
             </div>
 
             {/* Content */}
-            <div className="relative z-30 flex h-full flex-col justify-end px-4 pb-12 text-center text-white md:w-1/2 md:items-start md:justify-center md:px-16 md:pb-0 md:text-right">
+            <div className="relative z-30 flex h-full flex-col justify-end px-4 pb-12 text-center md:w-1/2 md:items-start md:justify-center md:px-16 md:pb-0 md:text-right">
               <div className="flex w-full max-w-[600px] flex-col items-center justify-center gap-2 md:items-start">
-                <h2 className="mb-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
+                <h2 className="text-primary-foreground dark:text-foreground mb-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
                   {slide.title}
                 </h2>
                 {/* Mobile Subtitle */}
-                <p className="mb-4 text-sm text-gray-200 md:hidden">
+                <p className="text-primary-foreground dark:text-foreground mb-4 text-sm md:hidden">
                   زیرنویس چسبیده | پخش آنلاین
                 </p>
                 {/* Desktop Description */}
-                <p className="mb-8 line-clamp-3 hidden text-sm leading-relaxed text-gray-200 md:block md:text-sm">
+                <p className="text-primary-foreground dark:text-foreground mb-8 line-clamp-3 hidden text-sm leading-relaxed md:block md:text-sm">
                   {slide.description}
                 </p>
               </div>
               <div className="flex w-full items-center gap-3 md:w-auto md:gap-4">
                 {/* Bookmark Button - Icon only on mobile */}
-                <Button
-                  variant="outline"
-                  size="default"
-                  className="aspect-square size-12 border-white bg-transparent p-0 text-white hover:bg-white/20 hover:text-white md:aspect-auto md:h-10 md:w-auto md:px-8 md:text-base"
-                >
+                <Button variant="outline" size="default" className="">
                   <Bookmark size={20} />
                   <span className="hidden md:mr-2 md:inline">
                     افزودن به لیست تماشا
@@ -106,13 +107,18 @@ const Slider = () => {
           </SwiperSlide>
         ))}
 
-        {/* Navigation Buttons - Hidden on mobile */}
-        <button className="image-swiper-button-prev bg-primary/50 hover:bg-primary/70 absolute top-1/2 right-4 z-20 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full text-white backdrop-blur-sm transition-colors disabled:opacity-50 md:flex">
-          <ChevronRight className="size-7" />
-        </button>
-        <button className="image-swiper-button-next bg-primary/50 hover:bg-primary/70 absolute top-1/2 left-4 z-20 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full text-white backdrop-blur-sm transition-colors disabled:opacity-50 md:flex">
-          <ChevronLeft className="size-7" />
-        </button>
+        {/* Navigation Buttons - Hidden on mobile, bottom left on desktop */}
+        <div
+          className="absolute bottom-8 left-8 z-20 hidden gap-3 md:flex"
+          dir="ltr"
+        >
+          <button className="image-swiper-button-next bg-primary/50 hover:bg-primary/70 flex size-12 items-center justify-center rounded-xl text-white backdrop-blur-sm transition-colors disabled:opacity-50">
+            <ChevronLeft className="size-7" />
+          </button>
+          <button className="image-swiper-button-prev bg-primary/50 hover:bg-primary/70 flex size-12 items-center justify-center rounded-xl text-white backdrop-blur-sm transition-colors disabled:opacity-50">
+            <ChevronRight className="size-7" />
+          </button>
+        </div>
       </Swiper>
     </section>
   );

@@ -4,6 +4,7 @@ import MobileNav from "./MobileNav";
 import { topbarNavItems } from "@/constants";
 import Search from "./Search";
 import SignInButton from "./SignInButton";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 const Topbar = () => {
   return (
@@ -26,6 +27,7 @@ const Topbar = () => {
       </div>
       {/* search and sign in/register buttons */}
       <div className="flex items-center gap-2 md:gap-8">
+        <ModeToggle />
         <Search />
         <SignInButton />
       </div>

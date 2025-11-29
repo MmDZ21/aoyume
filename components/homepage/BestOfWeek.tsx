@@ -12,10 +12,10 @@ const BestOfWeek = () => {
           src="/images/aot.jpg"
           alt="Background"
           fill
-          className="object-cover blur-md"
+          className="object-cover"
           priority
         />
-        <div className="bg-primary/50 absolute inset-0 rounded-2xl" />
+        <div className="bg-primary/80 dark:bg-background/80 absolute inset-0 rounded-2xl" />
       </div>
 
       <div className="relative z-10 container mx-auto flex h-full flex-col justify-center px-4">

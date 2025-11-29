@@ -46,7 +46,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="px-4 pt-16 pb-8 text-white md:px-8">
+    <footer className="px-4 pt-16 pb-8 md:px-8">
       <div className="mx-auto max-w-[1440px]">
         <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-12">
           {/* Access Column */}
