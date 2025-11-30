@@ -4,7 +4,7 @@ import SliderContainer from "@/components/slider/SliderContainer";
 
 export default function Home() {
   return (
-    <div className="w-full py-8 space-y-4 md:space-y-8">
+    <div className="w-full space-y-4 py-8 md:space-y-8">
       <SliderContainer />
       <MediaCarouselController />
       <MediaCarouselController />
