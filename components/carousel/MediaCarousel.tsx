@@ -124,7 +124,7 @@ const MediaCarousel = ({
         {/* Right Side: Title (RTL: Right is start) */}
         <div className="flex items-center gap-2">
           <div className="bg-primary h-6 w-1 rounded-2xl"></div>
-          <h2 className="text-primary dark:text-foreground text-sm font-bold md:text-xl">
+          <h2 className="text-primary dark:text-foreground text-sm font-bold md:text-sm">
             {title}
           </h2>
         </div>
