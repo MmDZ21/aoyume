@@ -39,11 +39,11 @@ export function RatingBox({ currentRating, onRatingChange }: RatingBoxProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex h-full flex-1 flex-col rounded-xl border border-primary/10 dark:border-white/10 bg-primary/10 dark:bg-white/5 p-6 backdrop-blur-sm transition-all hover:dark:border-white/20 hover:dark:bg-white/10 hover:border-primary/20 hover:bg-primary/20">
+      <div className="flex gap-4 h-full flex-1 flex-col rounded-xl border border-primary/10 dark:border-white/10 bg-primary/10 dark:bg-white/5 p-6 backdrop-blur-sm transition-all hover:dark:border-white/20 hover:dark:bg-white/10 hover:border-primary/20 hover:bg-primary/20">
         <div className="flex flex-1 flex-col items-center justify-center gap-2">
           {currentRating ? (
             <div className="flex items-baseline gap-1">
-              <span className="text-3xl font-bold">{currentRating}</span>
+              <span className="text-3xl font-bold text-yellow-500">{currentRating}</span>
               <span className="text-sm text-muted-foreground">/10</span>
             </div>
           ) : (

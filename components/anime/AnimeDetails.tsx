@@ -37,7 +37,7 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
       <div className="relative z-10 flex flex-col gap-8 p-6 md:p-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:justify-between">
           {/* Stats Section (Desktop: Right, Mobile: Bottom) */}
-          <div className="order-2 flex shrink-0 flex-row gap-4 lg:order-2 lg:w-64 lg:flex-col">
+          <div className="order-2 flex shrink-0 flex-col md:flex-row gap-4 lg:order-2 lg:w-64 lg:flex-col">
             <RatingBox currentRating={8} />
             <WatchStatusBox currentStatus={"watching"} />
           </div>

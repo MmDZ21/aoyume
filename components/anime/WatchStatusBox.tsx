@@ -47,10 +47,10 @@ export function WatchStatusBox({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex h-full flex-1 flex-col rounded-xl border border-primary/10 dark:border-white/10 bg-primary/10 dark:bg-white/5 p-6 backdrop-blur-sm transition-all hover:dark:border-white/20 hover:dark:bg-white/10 hover:border-primary/20 hover:bg-primary/20">
+      <div className="flex gap-4 h-full flex-1 flex-col rounded-xl border border-primary/10 dark:border-white/10 bg-primary/10 dark:bg-white/5 p-6 backdrop-blur-sm transition-all hover:dark:border-white/20 hover:dark:bg-white/10 hover:border-primary/20 hover:bg-primary/20">
         <div className="flex flex-1 flex-col items-center justify-center gap-2">
           {currentStatus ? (
-            <span className="text-base font-semibold">
+            <span className="text-base font-semibold text-yellow-500">
               {watchStatusLabels[currentStatus] || currentStatus}
             </span>
           ) : (

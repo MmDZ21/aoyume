@@ -24,26 +24,24 @@ const mockAnime: AnimeDetailsType = {
 };
 
 const mockDownloadItems: DownloadItem[] = [
-  { id: 1, quality: "WebRip", size: "545-520", link: "#", resolution: "1080" },
-  { id: 2, quality: "WebRip", size: "545-520", link: "#", resolution: "1080" },
-  { id: 3, quality: "WebRip", size: "545-520", link: "#", resolution: "720" },
-  { id: 4, quality: "WebRip", size: "545-520", link: "#", resolution: "480" },
+  { id: 1, quality: "WebRip", size: "545", link: "#", resolution: "1080", episode: 1 },
+  { id: 2, quality: "WebRip", size: "545", link: "#", resolution: "1080", episode: 2 },
+  { id: 3, quality: "WebRip", size: "545", link: "#", resolution: "720", episode: 3 },
+  { id: 4, quality: "WebRip", size: "545", link: "#", resolution: "480", episode: 4 },
 ];
 
 export default function AnimeDetailsPage() {
   const tabs: TabItem[] = [
     {
-      value: "similar",
-      label: "مشابه",
-      content: (
-        <div className="text-center text-slate-400">محتوای بخش مشابه</div>
-      ),
+      value: "download",
+      label: "دانلود",
+      content: <DownloadContainer items={mockDownloadItems} />,
     },
     {
-      value: "comments",
-      label: "نظرات",
+      value: "details",
+      label: "جزئیات",
       content: (
-        <div className="text-center text-slate-400">محتوای بخش نظرات</div>
+        <div className="text-center text-slate-400">محتوای بخش جزئیات</div>
       ),
     },
     {
@@ -61,30 +59,18 @@ export default function AnimeDetailsPage() {
       ),
     },
     {
-      value: "characters",
-      label: "کارکتر",
+      value: "similar",
+      label: "مشابه",
       content: (
-        <div className="text-center text-slate-400">محتوای بخش کارکتر</div>
+        <div className="text-center text-slate-400">محتوای بخش مشابه</div>
       ),
     },
     {
-      value: "gallery",
-      label: "گالری",
+      value: "comments",
+      label: "نظرات",
       content: (
-        <div className="text-center text-slate-400">محتوای بخش گالری</div>
+        <div className="text-center text-slate-400">محتوای بخش نظرات</div>
       ),
-    },
-    {
-      value: "subtitles",
-      label: "زیرنویس",
-      content: (
-        <div className="text-center text-slate-400">محتوای بخش زیرنویس</div>
-      ),
-    },
-    {
-      value: "download",
-      label: "دانلود",
-      content: <DownloadContainer items={mockDownloadItems} />,
     },
   ];
 

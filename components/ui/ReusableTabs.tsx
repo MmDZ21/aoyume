@@ -30,10 +30,14 @@ export function ReusableTabs({
   dir = "rtl",
 }: ReusableTabsProps) {
   return (
-    <Tabs defaultValue={defaultValue} className={cn("w-full", className)} dir={dir}>
+    <Tabs
+      defaultValue={defaultValue}
+      className={cn("w-full", className)}
+      dir={dir}
+    >
       <TabsList
         className={cn(
-          "flex h-auto w-full flex-wrap justify-start gap-3 bg-transparent p-0",
+          "flex h-auto w-full flex-col gap-2 bg-transparent p-0 md:flex-row md:flex-wrap md:justify-start",
           listClassName
         )}
       >
@@ -42,7 +46,8 @@ export function ReusableTabs({
             key={tab.value}
             value={tab.value}
             className={cn(
-              "rounded-2xl border border-white/10 bg-[#1e293b]/50 px-6 py-3 text-slate-300 transition-all hover:bg-white/5 data-[state=active]:border-blue-500/50 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg",
+              "hover:bg-primary/20 dark:hover:bg-primary/40 data-[state=active]:border-primary data-[state=active]:bg-primary dark:data-[state=active]:border-primary dark:data-[state=active]:bg-primary bg-primary/5 dark:bg-primary/20 text-muted-foreground dark:text-muted-foreground border-primary/10 dark:border-primary/30 cursor-pointer rounded-2xl border py-3 text-center transition-all hover:text-white data-[state=active]:text-white data-[state=active]:shadow-lg dark:hover:text-white dark:data-[state=active]:text-white dark:data-[state=active]:shadow-lg md:text-left",
+              "w-full md:w-auto",
               triggerClassName
             )}
           >
@@ -54,12 +59,13 @@ export function ReusableTabs({
         <TabsContent
           key={tab.value}
           value={tab.value}
-          className={cn("mt-8", contentClassName)}
+          className={cn("mt-4", contentClassName)}
         >
-          {tab.content}
+          <div className="bg-primary/5 border-primary/20 rounded-2xl border p-4 md:p-8">
+            {tab.content}
+          </div>
         </TabsContent>
       ))}
     </Tabs>
   );
 }
-
