@@ -22,6 +22,7 @@ export function ModeToggle() {
     <div className="flex items-center gap-2">
       <Moon className="size-4" />
       <Switch
+        dir="ltr"
         checked={resolvedTheme === "dark"}
         onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
         aria-label="Toggle theme"
