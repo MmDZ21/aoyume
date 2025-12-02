@@ -15,5 +15,8 @@ export interface AnimeDetails {
   synopsis: string;
   downloadedCount: number;
   watchedCount: number;
+  ageRating?: string; // e.g., "13+ سال"
+  network?: string; // e.g., "نت فلیکس"
+  networkLogo?: string; // e.g., "N" for Netflix
 }
 
