@@ -93,7 +93,7 @@ const getAnimeEpisodes = cache(async (id: number) => {
     console.error("Supabase Error (Episodes):", error);
     return [];
   }
-  console.log({episodes: data});
+  // console.log({episodes: data});
   return data as unknown as EpisodesList;
 });
 
@@ -106,6 +106,10 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
   // Fetch data in parallel
   const animeDataPromise = getAnimeDetails(animeId);
   const episodesDataPromise = getAnimeEpisodes(animeId);
+
+  // Check user session
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
   const [animeData, episodesData] = await Promise.all([animeDataPromise, episodesDataPromise]);
 
@@ -123,7 +127,7 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     {
       value: "download",
       label: "دانلود",
-      content: <DownloadContainer episodes={episodesData} />,
+      content: <DownloadContainer episodes={episodesData} hasAccess={!!user} />,
     },
     {
       value: "details",

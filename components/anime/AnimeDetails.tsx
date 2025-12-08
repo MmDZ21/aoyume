@@ -73,13 +73,13 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
 
             {/* Info Section */}
             <div className="flex flex-col gap-6 text-right max-w-sm">
-              <h1 className="text-2xl font-bold text-center md:text-left md:text-3xl">{title}</h1>
+              <h1 className="text-2xl font-bold text-center md:text-start md:text-3xl">{title}</h1>
 
               <div className={cn(buttonVariants({ variant: "default" }))}>
-                {latestUpdate}
+                <span className="text-muted-foreground">آخرین بروزرسانی: </span>{latestUpdate}
               </div>
 
-              <div className="flex flex-wrap gap-4 justify-end">
+              <div className="flex flex-wrap gap-4 justify-start">
                 {genres.map((genre) => (
                   <span
                     key={genre}

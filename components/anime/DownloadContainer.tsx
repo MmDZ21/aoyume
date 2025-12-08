@@ -4,15 +4,20 @@ import { useState, useEffect } from "react";
 import { DownloadBox, DownloadItem } from "./DownloadBox";
 import { QualitySelector } from "./QualitySelector";
 import { EpisodesList } from "@/types/anime";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { Lock } from "lucide-react";
 
 interface DownloadContainerProps {
   episodes?: EpisodesList;
   items?: DownloadItem[]; // Keep for backward compatibility or different usage if needed
+  hasAccess?: boolean; // New prop to check user access
 }
 
 export function DownloadContainer({
   episodes,
   items,
+  hasAccess = false, // Default to false if not provided
 }: DownloadContainerProps) {
   // Extract qualities from episodes if provided
   const availableQualities = episodes?.map((group) => group.quality) || [];
@@ -27,6 +32,31 @@ export function DownloadContainer({
       setSelectedQuality(availableQualities[availableQualities.length - 1]);
     }
   }, [availableQualities, selectedQuality]);
+
+  // If user is not logged in, show unauthenticated message
+  if (!hasAccess) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center md:p-12">
+        <div className="rounded-full bg-primary/10 p-4">
+          <Lock className="h-8 w-8 text-primary" />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold">برای دانلود باید وارد شوید</h3>
+          <p className="text-muted-foreground">
+            برای دسترسی به لینک‌های دانلود، لطفاً ابتدا وارد حساب کاربری خود شوید یا ثبت‌نام کنید.
+          </p>
+        </div>
+        <div className="flex gap-4 pt-2">
+          <Button asChild>
+            <Link href="/sign-in">ورود به حساب</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/sign-up">ثبت‌نام</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   // If episodes data is provided, use it
   if (episodes && episodes.length > 0) {
