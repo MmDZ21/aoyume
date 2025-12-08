@@ -11,15 +11,9 @@ import { CommentsSection } from "@/components/comments/CommentsSection";
 import { Metadata } from "next";
 import { Suspense, cache } from "react";
 import { slugify } from "@/lib/utils";
+import { EpisodesList } from "@/types/anime";
 
 // Mock data (keep these outside the component to avoid recreation on render)
-const mockDownloadItems: DownloadItem[] = [
-  { id: 1, quality: "WebRip", size: "545", link: "#", resolution: "1080", episode: 1 },
-  { id: 2, quality: "WebRip", size: "545", link: "#", resolution: "1080", episode: 2 },
-  { id: 3, quality: "WebRip", size: "545", link: "#", resolution: "720", episode: 3 },
-  { id: 4, quality: "WebRip", size: "545", link: "#", resolution: "480", episode: 4 },
-];
-
 const mockRelatedItems: MediaItem[] = [
   { id: 1, title: "Attack on Titan", image: "/images/aot.jpg", rating: 9.0, year: 2013, duration: "24m", description: "Humans fight against Titans." },
   // ... (rest of mock data)
@@ -88,14 +82,32 @@ const getAnimeDetails = cache(async (id: number) => {
   return data;
 });
 
+// Fetch episodes using RPC
+const getAnimeEpisodes = cache(async (id: number) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("get_episodes_grouped_by_quality", {
+    anime_id_param: id,
+  });
+
+  if (error) {
+    console.error("Supabase Error (Episodes):", error);
+    return [];
+  }
+  console.log({episodes: data});
+  return data as unknown as EpisodesList;
+});
+
 export default async function AnimeDetailsPage({ params }: PageProps) {
   const { id, slug } = await params;
   const animeId = parseInt(id, 10);
 
   if (isNaN(animeId)) notFound();
 
-  // Fetch data
-  const animeData = await getAnimeDetails(animeId);
+  // Fetch data in parallel
+  const animeDataPromise = getAnimeDetails(animeId);
+  const episodesDataPromise = getAnimeEpisodes(animeId);
+
+  const [animeData, episodesData] = await Promise.all([animeDataPromise, episodesDataPromise]);
 
   if (!animeData) notFound();
 
@@ -111,7 +123,7 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     {
       value: "download",
       label: "دانلود",
-      content: <DownloadContainer items={mockDownloadItems} />,
+      content: <DownloadContainer episodes={episodesData} />,
     },
     {
       value: "details",

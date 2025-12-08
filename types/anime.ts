@@ -20,3 +20,22 @@ export interface AnimeDetails {
   networkLogo?: string; // e.g., "N" for Netflix
 }
 
+export interface Episode {
+  id: number;
+  anime_id: number;
+  episode_number: number;
+  quality: string;
+  created_at: string;
+  thumbnail: string;
+  size: string;
+  link: string;
+  subinfo: string;
+  direct_link_status: "uploaded" | "pending" | "failed"; // Assuming possible values based on example
+}
+
+export interface QualityGroup {
+  quality: string;
+  episodes: Episode[];
+}
+
+export type EpisodesList = QualityGroup[];

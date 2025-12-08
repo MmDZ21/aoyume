@@ -33,7 +33,7 @@ export function QualitySelector({
               "border-primary/10 bg-primary/5 text-xs text-muted-foreground hover:bg-primary/20 data-[state=active]:border-primary data-[state=active]:bg-primary dark:border-primary/30 dark:bg-primary/20 dark:text-muted-foreground dark:hover:bg-primary/40 dark:data-[state=active]:border-primary dark:data-[state=active]:bg-primary cursor-pointer rounded-2xl border px-4 py-2 font-medium transition-all hover:text-white data-[state=active]:text-white data-[state=active]:shadow-lg dark:hover:text-white dark:data-[state=active]:text-white dark:data-[state=active]:shadow-lg sm:px-6 sm:text-sm"
             )}
           >
-            {q}p
+            {q}
           </TabsTrigger>
         ))}
       </TabsList>
