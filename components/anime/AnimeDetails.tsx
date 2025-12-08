@@ -1,17 +1,29 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import type { AnimeDetails as AnimeDetailsType } from "@/types/anime";
 import { buttonVariants } from "../ui/button";
 import { RatingBox } from "./RatingBox";
 import { WatchStatusBox } from "./WatchStatusBox";
+import { Synopsis } from "./Synopsis";
+import { Database } from "@/types/database.types";
+
+type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
 
 interface AnimeDetailsProps {
-  anime: AnimeDetailsType;
+  anime: AnimeDetailsRow;
   className?: string;
 }
 
 export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
-  const coverImage = anime.cover || anime.poster;
+  const coverImage = process.env.IMAGE_URL + (anime.wide_image || anime.dic_image_url || anime.mal_image_url || "/images/placeholder.jpg");
+  const posterImage = process.env.IMAGE_URL + (anime.dic_image_url || anime.mal_image_url || "/images/placeholder.jpg");
+  const title = anime.dic_title || anime.title_en_normalized || "Unknown Title";
+  const genres = anime.genre_names_en || [];
+  const latestUpdate = anime.last_update || "نامشخص";
+  const score = anime.dic_rating || 0;
+  const malScore = anime.dic_score ? parseFloat(anime.dic_score) : 0;
+  const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "Unknown";
+  const episodes = anime.episodes_en || anime.episodes_fa || "0";
+  const synopsis = anime.summary_fa || anime.summary_en || "No synopsis available.";
 
   return (
     <div
@@ -24,7 +36,7 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
       <div className="absolute inset-0 z-0">
         <Image
           src={coverImage}
-          alt={`${anime.title} cover`}
+          alt={`${title} cover`}
           fill
           className="object-cover"
           priority
@@ -48,8 +60,8 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
             <div className="group relative mx-auto shrink-0 lg:mx-0">
               <div className="relative h-96 w-64 overflow-hidden rounded-2xl shadow-2xl">
                 <Image
-                  src={anime.poster}
-                  alt={anime.title}
+                  src={posterImage}
+                  alt={title}
                   fill
                   className="object-cover"
                 />
@@ -60,15 +72,15 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
             </div>
 
             {/* Info Section */}
-            <div className="flex flex-col gap-6 text-right">
-              <h1 className="text-2xl font-bold text-center md:text-left md:text-3xl">{anime.title}</h1>
+            <div className="flex flex-col gap-6 text-right max-w-sm">
+              <h1 className="text-2xl font-bold text-center md:text-left md:text-3xl">{title}</h1>
 
               <div className={cn(buttonVariants({ variant: "default" }))}>
-                {anime.latestUpdate}
+                {latestUpdate}
               </div>
 
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                {anime.genres.map((genre) => (
+              <div className="flex flex-wrap gap-4 justify-end">
+                {genres.map((genre) => (
                   <span
                     key={genre}
                     className={cn(buttonVariants({ variant: "outline" }))}
@@ -82,35 +94,30 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز AoYume :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-yellow-500">{anime.score}</span> از 10
+                    <span className="font-bold text-yellow-500">{score}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز MyAnimeList :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-yellow-500">{anime.myAnimeListScore}</span> از 10
+                    <span className="font-bold text-yellow-500">{malScore}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span> زمان پخش :</span>
-                  <span>{anime.broadcastTime}</span>
+                  <span>{broadcastTime}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span>قسمت ها :</span>
-                  <span>{anime.episodes} قسمت</span>
+                  <span>{episodes} قسمت</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Section: Synopsis */}
-        <div className="mt-4 border-t border-white/10 pt-6 text-right">
-          <h3 className="mb-2 text-lg font-semibold">خلاصه انیمه :</h3>
-          <p className="text-sm leading-relaxed md:text-sm">
-            {anime.synopsis}
-          </p>
-        </div>
+        {/* Bottom Section: Synopsis with Show More button */}
+        <Synopsis text={synopsis} />
       </div>
     </div>
   );

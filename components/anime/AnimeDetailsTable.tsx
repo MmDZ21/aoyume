@@ -1,9 +1,11 @@
 import React from "react";
-import type { AnimeDetails as AnimeDetailsType } from "@/types/anime";
 import { cn } from "@/lib/utils";
+import { Database } from "@/types/database.types";
+
+type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
 
 interface AnimeDetailsTableProps {
-  anime: AnimeDetailsType;
+  anime: AnimeDetailsRow;
 }
 
 interface DetailItem {
@@ -13,80 +15,91 @@ interface DetailItem {
 }
 
 export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
+  const genres = anime.genre_names_en || [];
+  const status = anime.dic_status === 1 ? "Airing" : "Finished";
+  const episodes = anime.episodes_en || anime.episodes_fa || "0";
+  const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "Unknown";
+  const latestUpdate = anime.last_update || "Unknown";
+  const score = anime.dic_rating || 0;
+  const voters = 0; // Not available in view
+  const malScore = anime.dic_score || "0";
+  const malVoters = anime.dic_scored_by?.replace(/,/g, "") || "0";
+  const downloadedCount = 0; // Not available in view
+  const watchedCount = anime.post_hit || 0;
+  
   const items: DetailItem[] = [
     {
       label: "رده سنی",
-      value: anime.ageRating || "13+ سال",
+      value: "13+ سال", // Placeholder
     },
     {
       label: "شبکه پخش",
       value: (
         <div className="flex items-center gap-1.5">
-          {anime.networkLogo && (
-            <span className="text-base font-bold text-[#E50914]">
-              {anime.networkLogo}
-            </span>
-          )}
-          <span>{anime.network || "نت فلیکس"}</span>
+          {/* Placeholder for network logo logic */}
+          <span className="text-base font-bold text-[#E50914]">
+            N
+          </span>
+          <span>{"نت فلیکس"}</span>
         </div>
       ),
     },
     {
       label: "ژانر",
-      value: anime.genres.join("، "),
+      value: genres.join("، "),
       className: "col-span-2",
     },
     {
       label: "وضعیت",
-      value: anime.status,
+      value: status,
     },
     {
       label: "تعداد قسمت‌ها",
-      value: `${anime.episodes} قسمت`,
+      value: `${episodes} قسمت`,
     },
     {
       label: "زمان پخش",
-      value: anime.broadcastTime,
+      value: broadcastTime,
       className: "col-span-2",
     },
     {
       label: "آخرین بروزرسانی",
-      value: anime.latestUpdate,
+      value: latestUpdate,
       className: "col-span-2",
     },
     {
       label: "امتیاز AoYume",
       value: (
         <div className="flex items-baseline gap-1">
-          <span className="">{anime.score}</span>
+          <span className="">{score}</span>
           <span className="">/ 10</span>
         </div>
       ),
     },
     {
       label: "رای‌دهندگان",
-      value: anime.voters.toLocaleString("fa-IR"),
+      value: voters.toLocaleString("fa-IR"),
     },
     {
       label: "امتیاز MAL",
       value: (
         <div className="flex items-baseline gap-1">
-          <span className="">{anime.myAnimeListScore}</span>
+          <span className="">{malScore}</span>
           <span className="">/ 10</span>
         </div>
       ),
     },
     {
       label: "رای‌دهندگان MAL",
-      value: anime.myAnimeListVoters.toLocaleString("fa-IR"),
+      value: parseInt(malVoters).toLocaleString("fa-IR"),
     },
     {
       label: "تعداد دانلود",
-      value: anime.downloadedCount.toLocaleString("fa-IR"),
+      value: downloadedCount.toLocaleString("fa-IR"),
     },
     {
       label: "تعداد مشاهده",
-      value: anime.watchedCount.toLocaleString("fa-IR"),
+      value: watchedCount.toLocaleString("fa-IR"),
     },
   ];
 

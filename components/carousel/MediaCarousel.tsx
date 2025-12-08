@@ -8,107 +8,27 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import Link from "next/link";
-
-// Import Swiper styles
 import "swiper/css";
 import MediaCard from "./MediaCard";
-
-interface MediaItem {
-  id: number;
-  title: string;
-  image: string;
-  rating: number;
-  year: number;
-  duration: string;
-  description: string;
-}
-
-// Mock data based on existing images in the project
-const items: MediaItem[] = [
-  {
-    id: 1,
-    title: "FREE GUY",
-    image: "/images/aot.jpg",
-    rating: 8.9,
-    year: 2021,
-    duration: "120 min",
-    description:
-      "A bank teller discovers he is actually a background player in an open-world video game, and decides to become the hero of his own story.",
-  },
-  {
-    id: 2,
-    title: "FREE GUY",
-    image: "/images/frieren.jpg",
-    rating: 9.1,
-    year: 2023,
-    duration: "24 min",
-    description:
-      "Elven mage Frieren and her fellow adventurers have defeated the Demon King and brought peace to the land.",
-  },
-  {
-    id: 3,
-    title: "FREE GUY",
-    image: "/images/jujutsu.jpg",
-    rating: 8.7,
-    year: 2020,
-    duration: "24 min",
-    description:
-      "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed himself.",
-  },
-  {
-    id: 4,
-    title: "FREE GUY",
-    image: "/images/aot.jpg",
-    rating: 8.9,
-    year: 2021,
-    duration: "120 min",
-    description:
-      "A bank teller discovers he is actually a background player in an open-world video game.",
-  },
-  {
-    id: 5,
-    title: "FREE GUY",
-    image: "/images/frieren.jpg",
-    rating: 9.1,
-    year: 2023,
-    duration: "24 min",
-    description:
-      "Elven mage Frieren and her fellow adventurers have defeated the Demon King.",
-  },
-  {
-    id: 6,
-    title: "FREE GUY",
-    image: "/images/jujutsu.jpg",
-    rating: 8.7,
-    year: 2020,
-    duration: "24 min",
-    description:
-      "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed himself.",
-  },
-  {
-    id: 7,
-    title: "FREE GUY",
-    image: "/images/aot.jpg",
-    rating: 8.9,
-    year: 2021,
-    duration: "120 min",
-    description:
-      "A bank teller discovers he is actually a background player in an open-world video game.",
-  },
-];
+import type { MediaItem } from "./MediaCard";
 
 interface MediaCarouselProps {
   title?: string;
   link?: string;
+  items: MediaItem[];
 }
 
 const MediaCarousel = ({
   title = "انیمه های در حال پخش",
   link = "#",
+  items,
 }: MediaCarouselProps) => {
   const swiperRef = useRef<SwiperType>(null);
+
+  if (!items || items.length === 0) {
+    return null;
+  }
 
   return (
     <div className="w-full space-y-4">
@@ -117,7 +37,7 @@ const MediaCarousel = ({
         {/* Right Side: Title (RTL: Right is start) */}
         <div className="flex items-center gap-2">
           <div className="bg-primary h-6 w-1 rounded-2xl"></div>
-          <h2 className="text-primary dark:text-foreground text-sm font-bold md:text-sm">
+          <h2 className="text-primary dark:text-foreground text-sm font-bold md:text-base">
             {title}
           </h2>
         </div>
@@ -187,7 +107,7 @@ const MediaCarousel = ({
         >
           {items.map((item) => (
             <SwiperSlide key={item.id} className="overflow-visible">
-              <MediaCard item={item}/>
+              <MediaCard item={item} />
             </SwiperSlide>
           ))}
         </Swiper>
