@@ -47,3 +47,29 @@ export function mapRowToMediaItem(item: AnimeDetailsRow): MediaItem {
   };
 }
 
+// Result type from search_animes_summary RPC
+type SearchSummaryRow = {
+  anime_id: number;
+  dic_image_url: string;
+  dic_kayfet: string;
+  dic_score: string;
+  dic_status: number;
+  dic_title: string;
+  dic_types: number;
+  episodes_en: string;
+  score: number;
+};
+
+export function mapSearchSummaryToMediaItem(item: SearchSummaryRow): MediaItem {
+  return {
+    id: item.anime_id,
+    title: item.dic_title,
+    image: item.dic_image_url
+      ? `${process.env.IMAGE_URL}${item.dic_image_url}`
+      : "/images/placeholder.jpg",
+    rating: item.score || parseFloat(item.dic_score) || 0,
+    year: 0, // Not available in summary
+    duration: item.episodes_en ? `${item.episodes_en} قسمت` : "",
+    description: "", // Not available in summary
+  };
+}

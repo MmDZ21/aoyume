@@ -28,8 +28,10 @@ const Topbar = () => {
       {/* search and sign in/register buttons */}
       <div className="flex items-center gap-2 md:gap-8">
         <ModeToggle />
-        <Search />
-        <SignInButton />
+          <div className="flex items-center gap-2">
+          <Search />
+          <SignInButton />
+          </div>
       </div>
     </div>
   );
