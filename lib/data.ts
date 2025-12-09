@@ -30,6 +30,18 @@ export const getAnimeEpisodes = cache(async (id: number) => {
     console.error("Supabase Error (Episodes):", error);
     return [];
   }
-  return data as unknown as EpisodesList;
-});
 
+  const imageBaseUrl = process.env.IMAGE_URL || "";
+  const episodesList = data as unknown as EpisodesList;
+
+  // Prepend IMAGE_URL to thumbnails since client components can't access process.env.IMAGE_URL
+  const episodesWithImages = episodesList.map((group) => ({
+    ...group,
+    episodes: group.episodes.map((episode) => ({
+      ...episode,
+      thumbnail: episode.thumbnail ? `${imageBaseUrl}${episode.thumbnail}` : episode.thumbnail,
+    })),
+  }));
+
+  return episodesWithImages;
+});

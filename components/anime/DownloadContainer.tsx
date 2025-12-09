@@ -72,6 +72,7 @@ export function DownloadContainer({
           link: ep.link,
           resolution: ep.quality,
           episode: ep.episode_number,
+          thumbnail: ep.thumbnail,
         }))
       : [];
 

@@ -66,7 +66,7 @@ const Slider = ({ slides }: SliderProps) => {
             {/* Content */}
             <div className="relative z-30 flex h-full flex-col justify-end px-4 pb-12 text-center md:w-1/2 md:items-start md:justify-center md:px-16 md:pb-0 md:text-right">
               <div className="flex w-full max-w-[600px] flex-col items-center justify-center gap-2 md:items-start">
-                <h2 className="text-primary-foreground dark:text-foreground mb-2 line-clamp-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
+                <h2 dir="ltr" className="text-primary-foreground dark:text-foreground mb-2 line-clamp-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
                   {slide.title}
                 </h2>
                 {/* Mobile Subtitle */}

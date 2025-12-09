@@ -1,14 +1,7 @@
 import { cn } from "@/lib/utils";
-import EpisodeContainer from "./EpisodeContainer";
+import EpisodeContainer, { DownloadItem } from "./EpisodeContainer";
 
-export interface DownloadItem {
-  id: string | number;
-  quality: string;
-  size: string;
-  link: string;
-  resolution?: string; // e.g., "1080p", "720p"
-  episode: number;
-}
+export type { DownloadItem };
 
 export interface DownloadBoxProps {
   title?: string;
@@ -18,9 +11,8 @@ export interface DownloadBoxProps {
 
 export function DownloadBox({ items, className }: DownloadBoxProps) {
   return (
-    <div className={cn("space-y-8", className)}>
-      {/* List */}
-      <div className="flex flex-col gap-4">
+    <div className={cn("w-full", className)}>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((item) => (
           <EpisodeContainer key={item.id} item={item} />
         ))}
