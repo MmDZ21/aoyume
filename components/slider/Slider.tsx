@@ -10,32 +10,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// Mock data
-const slides = [
-  {
-    id: 1,
-    title: "عنوان انیمه",
-    description:
-      "سرنوشت جهان در تعادل است زیرا «ارن» قدرت نهایی تایتان‌ها را آزاد می‌کند. او با عزم شدیدی برای از بین بردن همه کسانی که الدیا را تهدید می‌کنند، ارتش غیرقابل توقفی از تایتان‌های عظیم‌الجثه را به سمت مارلی هدایت می‌کند.",
-    image: "/images/aot.jpg",
-  },
-  {
-    id: 2,
-    title: "فریرن: فراتر از پایان سفر",
-    description:
-      "پس از شکست دادن پادشاه شیاطین، گروه قهرمانان به خانه بازمی‌گردند و از هم جدا می‌شوند. فریرن، جادوگر الف، به دلیل عمر طولانی‌اش شاهد پیر شدن و مرگ دوستانش می‌شود و سفری را برای درک بهتر انسان‌ها آغاز می‌کند.",
-    image: "images/frieren.jpg",
-  },
-  {
-    id: 3,
-    title: "جوجوتسو کایسن",
-    description:
-      "یوجی ایتادوری، دانش‌آموزی با قدرت بدنی فوق‌العاده، برای نجات دوستش انگشت نفرین‌شده‌ای را می‌خورد و میزبان سوکونا، پادشاه نفرین‌ها، می‌شود. او به دبیرستان جوجوتسو می‌پیوندد تا یاد بگیرد چگونه قدرت خود را کنترل کند.",
-    image: "/images/jujutsu.jpg",
-  },
-];
+export interface SliderItem {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+}
 
-const Slider = () => {
+interface SliderProps {
+  slides: SliderItem[];
+}
+
+const Slider = ({ slides }: SliderProps) => {
+  if (!slides || slides.length === 0) return null;
+
   return (
     <section className="relative h-[500px] w-full md:h-[400px]">
       <Swiper
@@ -66,14 +54,14 @@ const Slider = () => {
             >
               {/* Gradient Overlay */}
               <div className="absolute inset-0 rounded-2xl">
-                <div className="from-primary absolute inset-0 rounded-2xl bg-linear-to-t to-transparent md:bg-linear-to-l"></div>
+                <div className="from-black dark:from-background absolute inset-0 rounded-2xl bg-linear-to-t to-transparent md:bg-linear-to-l"></div>
               </div>
             </div>
 
             {/* Content */}
             <div className="relative z-30 flex h-full flex-col justify-end px-4 pb-12 text-center md:w-1/2 md:items-start md:justify-center md:px-16 md:pb-0 md:text-right">
               <div className="flex w-full max-w-[600px] flex-col items-center justify-center gap-2 md:items-start">
-                <h2 className="text-primary-foreground dark:text-foreground mb-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
+                <h2 className="text-primary-foreground dark:text-foreground mb-2 line-clamp-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
                   {slide.title}
                 </h2>
                 {/* Mobile Subtitle */}
@@ -81,9 +69,11 @@ const Slider = () => {
                   زیرنویس چسبیده | پخش آنلاین
                 </p>
                 {/* Desktop Description */}
-                <p className="text-primary-foreground dark:text-foreground mb-8 line-clamp-3 hidden text-sm leading-relaxed md:block md:text-sm">
-                  {slide.description}
-                </p>
+                <div className="hidden md:block">
+                  <p className="text-primary-foreground dark:text-foreground mb-8 line-clamp-4 text-sm leading-relaxed md:text-sm">
+                    {slide.description}
+                  </p>
+                </div>
               </div>
               <div className="flex w-full items-center gap-3 md:w-auto md:gap-4">
                 {/* Bookmark Button - Icon only on mobile */}
