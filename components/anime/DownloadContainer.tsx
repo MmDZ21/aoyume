@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { DownloadBox, DownloadItem } from "./DownloadBox";
 import { QualitySelector } from "./QualitySelector";
 import { EpisodesList } from "@/types/anime";
@@ -20,7 +20,7 @@ export function DownloadContainer({
   hasAccess = false, // Default to false if not provided
 }: DownloadContainerProps) {
   // Extract qualities from episodes if provided
-  const availableQualities = episodes?.map((group) => group.quality) || [];
+  const availableQualities = useMemo(() => episodes?.map((group) => group.quality) || [], [episodes]);
   
   const [selectedQuality, setSelectedQuality] = useState<string>(
     availableQualities.length > 0 ? availableQualities[availableQualities.length - 1] : "1080"
@@ -59,10 +59,12 @@ export function DownloadContainer({
   }
 
   // If episodes data is provided, use it
-  if (episodes && episodes.length > 0) {
+  const mappedItems = useMemo(() => {
+    if (!episodes || episodes.length === 0) return [];
+    
     const selectedGroup = episodes.find((g) => g.quality === selectedQuality);
     
-    const mappedItems: DownloadItem[] = selectedGroup
+    const items: DownloadItem[] = selectedGroup
       ? selectedGroup.episodes.map((ep) => ({
           id: ep.id,
           quality: ep.quality,
@@ -74,7 +76,10 @@ export function DownloadContainer({
       : [];
 
     // Sort by episode number
-    mappedItems.sort((a, b) => a.episode - b.episode);
+    return items.sort((a, b) => a.episode - b.episode);
+  }, [episodes, selectedQuality]);
+
+  if (episodes && episodes.length > 0) {
 
     return (
       <div className="space-y-6">

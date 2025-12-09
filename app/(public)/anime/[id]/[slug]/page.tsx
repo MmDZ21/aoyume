@@ -2,40 +2,16 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import { AnimeDetails } from "@/components/anime/AnimeDetails";
 import { ReusableTabs, TabItem } from "@/components/ui/ReusableTabs";
-import { DownloadContainer } from "@/components/anime/DownloadContainer";
-import { DownloadItem } from "@/components/anime/DownloadBox";
+import { AsyncDownloadSection, DownloadSectionSkeleton } from "@/components/anime/AsyncDownloadSection";
 import { AnimeDetailsTable } from "@/components/anime/AnimeDetailsTable";
 import { MediaItem } from "@/components/carousel/MediaCard";
 import { MediaGrid } from "@/components/carousel/MediaGrid";
 import { CommentsSection } from "@/components/comments/CommentsSection";
 import { Metadata } from "next";
-import { Suspense, cache } from "react";
+import { Suspense } from "react";
 import { slugify } from "@/lib/utils";
-import { EpisodesList } from "@/types/anime";
-
-interface RelatedAnimeJson {
-  info: string;
-  anime_id: number;
-  dic_score: string;
-  dic_title: string;
-  dic_types: number;
-  dic_status: number;
-  episodes_en: string;
-  small_image: string;
-  relation_type?: string;
-}
-
-function mapJsonToMediaItem(item: RelatedAnimeJson): MediaItem {
-  return {
-    id: item.anime_id,
-    title: item.dic_title,
-    image: item.small_image ? `${process.env.IMAGE_URL}${item.small_image}` : "/images/placeholder.jpg",
-    rating: parseFloat(item.dic_score) || 0,
-    year: 0,
-    duration: item.episodes_en ? `${item.episodes_en} قسمت` : "",
-    description: item.relation_type || "",
-  };
-}
+import { mapJsonToMediaItem, RelatedAnimeJson } from "@/lib/mappers";
+import { getAnimeDetails } from "@/lib/data";
 
 // Reusable tab content wrapper
 const TabContent = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -58,12 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   if (isNaN(animeId)) return { title: "Anime Not Found" };
 
-  const supabase = await createClient();
-  const { data: anime } = await supabase
-    .from("complete_anime_details_materialized")
-    .select("dic_title, summary_fa, dic_image_url")
-    .eq("anime_id", animeId)
-    .single();
+  const anime = await getAnimeDetails(animeId);
 
   if (!anime) return { title: "Anime Not Found" };
 
@@ -78,38 +49,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// 2. Data fetching function with cache control
-const getAnimeDetails = cache(async (id: number) => {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("complete_anime_details_materialized")
-    .select("*")
-    .eq("anime_id", id)
-    .maybeSingle();
-
-  if (error) {
-    console.error("Supabase Error:", error);
-    throw new Error("Failed to fetch anime data");
-  }
-
-  return data;
-});
-
-// Fetch episodes using RPC
-const getAnimeEpisodes = cache(async (id: number) => {
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("get_episodes_grouped_by_quality", {
-    anime_id_param: id,
-  });
-
-  if (error) {
-    console.error("Supabase Error (Episodes):", error);
-    return [];
-  }
-  // console.log({episodes: data});
-  return data as unknown as EpisodesList;
-});
-
 export default async function AnimeDetailsPage({ params }: PageProps) {
   const { id, slug } = await params;
   const animeId = parseInt(id, 10);
@@ -121,11 +60,8 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fetch data in parallel
-  const animeDataPromise = getAnimeDetails(animeId);
-  const episodesDataPromise = getAnimeEpisodes(animeId);
-
-  const [animeData, episodesData] = await Promise.all([animeDataPromise, episodesDataPromise]);
+  // Fetch critical data (Details) - Blocking for SEO/Redirect
+  const animeData = await getAnimeDetails(animeId);
 
   if (!animeData) notFound();
 
@@ -137,7 +73,7 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     redirect(`/anime/${id}/${expectedSlug}`);
   }
 
-  // Process Related and Similar items
+  // Process Related and Similar items (Derived from animeData)
   const relatedItems: MediaItem[] = Array.isArray(animeData.related_anime)
     ? (animeData.related_anime as unknown as RelatedAnimeJson[]).map(mapJsonToMediaItem)
     : [];
@@ -150,7 +86,11 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     {
       value: "download",
       label: "دانلود",
-      content: <DownloadContainer episodes={episodesData} hasAccess={!!user} />,
+      content: (
+        <Suspense fallback={<DownloadSectionSkeleton />}>
+          <AsyncDownloadSection animeId={animeId} hasAccess={!!user} />
+        </Suspense>
+      ),
     },
     {
       value: "details",

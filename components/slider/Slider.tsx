@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import { Button } from "@/components/ui/button";
@@ -48,12 +49,16 @@ const Slider = ({ slides }: SliderProps) => {
             className="relative h-full w-full rounded-2xl"
           >
             {/* Background Image */}
-            <div
-              className="absolute inset-0 rounded-2xl bg-cover bg-center"
-              style={{ backgroundImage: `url(${slide.image})` }}
-            >
+            <div className="absolute inset-0 rounded-2xl">
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                className="object-cover rounded-2xl"
+                priority={true}
+              />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 rounded-2xl">
+              <div className="absolute inset-0 rounded-2xl z-10">
                 <div className="from-black dark:from-background absolute inset-0 rounded-2xl bg-linear-to-t to-transparent md:bg-linear-to-l"></div>
               </div>
             </div>

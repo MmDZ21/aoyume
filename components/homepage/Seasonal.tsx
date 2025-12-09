@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { Database } from "@/types/database.types";
 import type { MediaItem } from "../carousel/MediaCard";
 import { cache } from "react";
+import { mapRowToMediaItem } from "@/lib/mappers";
 
 type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
 
@@ -39,25 +40,7 @@ const Seasonal = async () => {
       (item): item is AnimeDetailsRow & { anime_id: number } =>
         item.anime_id !== null
     )
-    .map((item) => {
-      const year = item.air_date
-        ? new Date(item.air_date).getFullYear()
-        : new Date().getFullYear();
-
-      return {
-        id: item.anime_id,
-        title: item.dic_title || item.title_en_normalized || "Unknown",
-        image:
-          process.env.IMAGE_URL +
-          (item.dic_image_url ||
-            item.mal_image_url ||
-            "/images/placeholder.jpg"),
-        rating: item.dic_rating || parseFloat(item.dic_score || "0") || 0,
-        year: year,
-        duration: item.duration_en || item.duration_fa || "24m",
-        description: item.summary_fa || item.summary_en || "",
-      };
-    });
+    .map(mapRowToMediaItem);
 
   return (
     <MediaCarousel
