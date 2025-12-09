@@ -10,7 +10,7 @@ import BestOfWeek from "@/components/homepage/BestOfWeek";
 
 export default function Home() {
   return (
-    <div className="w-full space-y-4 py-8 md:space-y-8">
+    <div className="w-full space-y-8 py-8 md:space-y-8">
       <Suspense fallback={<SliderSkeleton />}>
         <SliderContainer />
       </Suspense>

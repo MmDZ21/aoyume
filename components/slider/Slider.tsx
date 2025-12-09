@@ -54,19 +54,22 @@ const Slider = ({ slides }: SliderProps) => {
                 src={slide.image}
                 alt={slide.title}
                 fill
-                className="object-cover rounded-2xl"
+                className="rounded-2xl object-cover"
                 priority={true}
               />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 rounded-2xl z-10">
-                <div className="from-black dark:from-background absolute inset-0 rounded-2xl bg-linear-to-t to-transparent md:bg-linear-to-l"></div>
+              <div className="absolute inset-0 z-10 rounded-2xl">
+                <div className="dark:from-background absolute inset-0 rounded-2xl bg-linear-to-t from-black to-transparent md:bg-linear-to-l"></div>
               </div>
             </div>
 
             {/* Content */}
             <div className="relative z-30 flex h-full flex-col justify-end px-4 pb-12 text-center md:w-1/2 md:items-start md:justify-center md:px-16 md:pb-0 md:text-right">
               <div className="flex w-full max-w-[600px] flex-col items-center justify-center gap-2 md:items-start">
-                <h2 dir="ltr" className="text-primary-foreground dark:text-foreground mb-2 line-clamp-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl">
+                <h2
+                  dir="ltr"
+                  className="text-primary-foreground dark:text-foreground mb-2 line-clamp-2 text-2xl font-bold md:mb-4 md:text-4xl lg:text-5xl"
+                >
                   {slide.title}
                 </h2>
                 {/* Mobile Subtitle */}
@@ -81,14 +84,6 @@ const Slider = ({ slides }: SliderProps) => {
                 </div>
               </div>
               <div className="flex w-full items-center gap-3 md:w-auto md:gap-4">
-                {/* Bookmark Button - Icon only on mobile */}
-                <Button variant="outline" size="default" className="">
-                  <Bookmark size={20} />
-                  <span className="hidden md:mr-2 md:inline">
-                    افزودن به لیست تماشا
-                  </span>
-                </Button>
-
                 {/* Watch Button - Full width on mobile */}
                 <Button
                   size="default"
@@ -96,6 +91,13 @@ const Slider = ({ slides }: SliderProps) => {
                 >
                   <Play className="fill-current" size={20} />
                   <span>شروع تماشای آنلاین</span>
+                </Button>
+                {/* Bookmark Button - Icon only on mobile */}
+                <Button variant="outline" className="h-12 md:h-10">
+                  <Bookmark size={20} />
+                  <span className="hidden md:mr-2 md:inline">
+                    افزودن به لیست تماشا
+                  </span>
                 </Button>
               </div>
             </div>
