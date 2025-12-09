@@ -13,16 +13,29 @@ import { Suspense, cache } from "react";
 import { slugify } from "@/lib/utils";
 import { EpisodesList } from "@/types/anime";
 
-// Mock data (keep these outside the component to avoid recreation on render)
-const mockRelatedItems: MediaItem[] = [
-  { id: 1, title: "Attack on Titan", image: "/images/aot.jpg", rating: 9.0, year: 2013, duration: "24m", description: "Humans fight against Titans." },
-  // ... (rest of mock data)
-];
+interface RelatedAnimeJson {
+  info: string;
+  anime_id: number;
+  dic_score: string;
+  dic_title: string;
+  dic_types: number;
+  dic_status: number;
+  episodes_en: string;
+  small_image: string;
+  relation_type?: string;
+}
 
-const mockSimilarItems: MediaItem[] = [
-  { id: 6, title: "Jujutsu Kaisen", image: "/images/jujutsu.jpg", rating: 8.7, year: 2020, duration: "24m", description: "A boy swallows a cursed talisman - the finger of a demon - and becomes cursed." },
-  // ... (rest of mock data)
-];
+function mapJsonToMediaItem(item: RelatedAnimeJson): MediaItem {
+  return {
+    id: item.anime_id,
+    title: item.dic_title,
+    image: item.small_image ? `${process.env.IMAGE_URL}${item.small_image}` : "/images/placeholder.jpg",
+    rating: parseFloat(item.dic_score) || 0,
+    year: 0,
+    duration: item.episodes_en ? `${item.episodes_en} قسمت` : "",
+    description: item.relation_type || "",
+  };
+}
 
 // Reusable tab content wrapper
 const TabContent = ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -103,13 +116,14 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
 
   if (isNaN(animeId)) notFound();
 
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   // Fetch data in parallel
   const animeDataPromise = getAnimeDetails(animeId);
   const episodesDataPromise = getAnimeEpisodes(animeId);
-
-  // Check user session
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
 
   const [animeData, episodesData] = await Promise.all([animeDataPromise, episodesDataPromise]);
 
@@ -122,6 +136,15 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
   if (expectedSlug && currentSlug !== expectedSlug) {
     redirect(`/anime/${id}/${expectedSlug}`);
   }
+
+  // Process Related and Similar items
+  const relatedItems: MediaItem[] = Array.isArray(animeData.related_anime)
+    ? (animeData.related_anime as unknown as RelatedAnimeJson[]).map(mapJsonToMediaItem)
+    : [];
+
+  const similarItems: MediaItem[] = Array.isArray(animeData.recommendations)
+    ? (animeData.recommendations as unknown as RelatedAnimeJson[]).map(mapJsonToMediaItem)
+    : [];
 
   const tabs: TabItem[] = [
     {
@@ -148,7 +171,7 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
       label: "مرتبط",
       content: (
         <TabContent title="انیمه های مرتبط">
-          <MediaGrid items={mockRelatedItems} />
+          <MediaGrid items={relatedItems} />
         </TabContent>
       ),
     },
@@ -157,7 +180,7 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
       label: "مشابه",
       content: (
         <TabContent title="انیمه های مشابه">
-          <MediaGrid items={mockSimilarItems} />
+          <MediaGrid items={similarItems} />
         </TabContent>
       ),
     },

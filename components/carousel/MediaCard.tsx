@@ -41,7 +41,7 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
 
             {/* Content */}
             <div className="absolute inset-x-0 bottom-0 p-4">
-              <h3 className="mb-6 line-clamp-2 text-center text-xl font-bold tracking-wider text-white uppercase shadow-black drop-shadow-lg">
+              <h3 dir="ltr" className="mb-6 line-clamp-2 text-center text-xl font-bold tracking-wider text-white uppercase shadow-black drop-shadow-lg">
                 {item.title}
               </h3>
 

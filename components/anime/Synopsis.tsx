@@ -25,7 +25,7 @@ export function Synopsis({ text, maxLength = 300 }: SynopsisProps) {
       </p>
       {shouldTruncate && (
         <Button
-          variant="default"
+          variant="ghost"
           size="sm"
           onClick={() => setIsExpanded(!isExpanded)}
           className="mt-2"
