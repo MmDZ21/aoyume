@@ -74,7 +74,7 @@ const EpisodeContainer = ({ item }: { item: DownloadItem }) => {
                 href={item.link}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "w-full gap-2 rounded-xl font-semibold shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                  "w-full"
                 )}
               >
                 <Download className="h-4 w-4" />

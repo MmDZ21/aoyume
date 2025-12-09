@@ -31,6 +31,11 @@ export const getAnimeEpisodes = cache(async (id: number) => {
     return [];
   }
 
+  // Handle null data - RPC might return null if no episodes found or access denied
+  if (!data) {
+    return [];
+  }
+
   const imageBaseUrl = process.env.IMAGE_URL || "";
   const episodesList = data as unknown as EpisodesList;
 
