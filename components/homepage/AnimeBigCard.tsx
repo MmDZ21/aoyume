@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { PlayCircle, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 import { Database } from "@/types/database.types";
+import Link from "next/link";
 
 type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
 
@@ -21,6 +22,7 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
   const description = anime.summary_fa || anime.summary_en || "";
   const background = anime.wide_image ? `${process.env.IMAGE_URL}${anime.wide_image}` : (anime.dic_image_url ? `${process.env.IMAGE_URL}${anime.dic_image_url}` : "/images/placeholder.jpg");
   const poster = anime.dic_image_url ? `${process.env.IMAGE_URL}${anime.dic_image_url}` : (anime.mal_image_url || "/images/placeholder.jpg");
+  const href = `/anime/${anime.anime_id}/${slugify(anime.dic_title!)}`;
 
   return (
     <section className="relative my-8 h-auto w-full overflow-hidden rounded-2xl px-4 py-8 md:h-[500px] md:px-16 md:py-4">
@@ -38,11 +40,12 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
 
       <div className="relative z-10 container mx-auto flex h-full flex-col justify-center px-4">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex gap-4 items-center justify-between">
           <div className="flex items-center gap-2 text-2xl font-bold text-white">
             <PlayCircle className="text-primary size-8" />
             <span>منتخب هفته</span>
           </div>
+          <div className="border-foreground/80 hidden h-px flex-1 border-t border-dashed sm:block" />
         </div>
 
         {/* Main Content Grid */}
@@ -77,8 +80,10 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
               {description}
             </p>
             <div className="flex justify-center md:justify-start">
-              <Button size="lg" className="w-full md:w-auto">
-                مشاهده انیمه
+              <Button size="lg" className="w-full md:w-auto" asChild>
+                <Link href={href}>
+                  مشاهده انیمه
+                </Link>
               </Button>
             </div>
           </div>
