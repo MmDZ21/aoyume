@@ -37,11 +37,11 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
             />
 
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-80" />
+            <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
 
             {/* Content */}
             <div className="absolute inset-x-0 bottom-0 p-4">
-              <h3 dir="ltr" className="mb-6 line-clamp-2 text-center text-xl font-bold tracking-wider text-white uppercase shadow-black drop-shadow-lg">
+              <h3 dir="ltr" className="mb-4 line-clamp-2 text-center text-xl font-bold tracking-wider text-white uppercase shadow-black drop-shadow-lg">
                 {item.title}
               </h3>
 

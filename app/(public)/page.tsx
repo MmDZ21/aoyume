@@ -1,11 +1,12 @@
 
-import BestOfWeek from "@/components/homepage/BestOfWeek";
+
 import Popular from "@/components/homepage/Popular";
 import Seasonal from "@/components/homepage/Seasonal";
 import SliderContainer from "@/components/slider/SliderContainer";
 import { Suspense } from "react";
 import { SliderSkeleton } from "@/components/slider/SliderSkeleton";
 import { CarouselSkeleton } from "@/components/carousel/CarouselSkeleton";
+import BestOfWeek from "@/components/homepage/BestOfWeek";
 
 export default function Home() {
   return (

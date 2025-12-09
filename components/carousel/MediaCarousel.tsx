@@ -6,6 +6,7 @@ import { Navigation } from "swiper/modules";
 import {
   ChevronLeft,
   ChevronRight,
+  PlayCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -36,7 +37,7 @@ const MediaCarousel = ({
       <div className="flex items-center justify-between gap-4">
         {/* Right Side: Title (RTL: Right is start) */}
         <div className="flex items-center gap-2">
-          <div className="bg-primary h-6 w-1 rounded-2xl"></div>
+          <PlayCircle className="size-8 text-primary" />
           <h2 className="text-primary dark:text-foreground text-sm font-bold md:text-base">
             {title}
           </h2>

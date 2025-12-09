@@ -1,0 +1,130 @@
+import Image from "next/image";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { PlayCircle, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Database } from "@/types/database.types";
+
+type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
+
+interface AnimeBigCardProps {
+  anime: AnimeDetailsRow;
+}
+
+const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
+  const title = anime.dic_title || anime.title_en_normalized || "Unknown";
+  const latestUpdate = anime.last_update || "نامشخص";
+  const genres = anime.genre_names_en || [];
+  const score = anime.dic_score || "0";
+  const malScore = anime.dic_rating || "0"; // Assuming dic_rating is MAL score or similar numeric rating
+  const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "نامشخص";
+  const episodes = anime.episodes_en || anime.episodes_fa || "?";
+  const description = anime.summary_fa || anime.summary_en || "";
+  const background = anime.wide_image ? `${process.env.IMAGE_URL}${anime.wide_image}` : (anime.dic_image_url ? `${process.env.IMAGE_URL}${anime.dic_image_url}` : "/images/placeholder.jpg");
+  const poster = anime.dic_image_url ? `${process.env.IMAGE_URL}${anime.dic_image_url}` : (anime.mal_image_url || "/images/placeholder.jpg");
+
+  return (
+    <section className="relative my-8 h-auto w-full overflow-hidden rounded-2xl px-4 py-8 md:h-[500px] md:px-16 md:py-4">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={background}
+          alt="Background"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="bg-primary/80 dark:bg-background/80 absolute inset-0 rounded-2xl" />
+      </div>
+
+      <div className="relative z-10 container mx-auto flex h-full flex-col justify-center px-4">
+        {/* Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-2xl font-bold text-white">
+            <PlayCircle className="text-primary size-8" />
+            <span>منتخب هفته</span>
+          </div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="flex flex-col gap-8 md:flex-row md:items-start">
+          {/* 1. Poster (Right side in RTL) */}
+          <div className="group relative mx-auto w-[200px] shrink-0 md:mx-0 lg:w-[240px]">
+            <div className="aspect-2/3 overflow-hidden rounded-xl shadow-2xl">
+              <Image
+                src={poster}
+                alt="Poster"
+                fill
+                className="rounded-2xl object-cover"
+              />
+            </div>
+            <Button
+              size="icon"
+              className="absolute right-4 bottom-4 rounded-xl border border-white/20 bg-white/20 text-white backdrop-blur-md transition-colors hover:bg-white/40"
+            >
+              <Plus className="size-6" />
+            </Button>
+          </div>
+
+          {/* 2. Description (Center) */}
+          <div className="flex flex-1 flex-col text-right text-white">
+            <h2
+              className="mb-2 text-center text-3xl font-bold md:text-right"
+              dir="ltr"
+            >
+              {anime.dic_title || "Unknown"}
+            </h2>
+            <p className="mb-8 text-justify leading-loose text-gray-200/90 md:pl-12 line-clamp-4">
+              {description}
+            </p>
+            <div className="flex justify-center md:justify-start">
+              <Button size="lg" className="w-full md:w-auto">
+                مشاهده انیمه
+              </Button>
+            </div>
+          </div>
+
+          {/* 3. Stats & Metadata (Left side in RTL) */}
+          <div className="flex flex-col gap-6 text-right max-w-[280px]">
+
+              <div className="flex flex-wrap gap-4 justify-start">
+                {genres.splice(0, 6).map((genre) => (
+                  <span
+                    key={genre}
+                    className={cn(buttonVariants({ variant: "outline" }))}
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
+
+              <div className="grid w-full max-w-md grid-cols-1 gap-y-8 text-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <span>امتیاز AoYume :</span>
+                  <span className="font-medium">
+                    <span className="font-bold text-yellow-500">{score}</span> از 10
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span>امتیاز MyAnimeList :</span>
+                  <span className="font-medium">
+                    <span className="font-bold text-yellow-500">{malScore}</span> از 10
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span> زمان پخش :</span>
+                  <span>{broadcastTime}</span>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span>قسمت ها :</span>
+                  <span>{episodes} قسمت</span>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+export default AnimeBigCard;
