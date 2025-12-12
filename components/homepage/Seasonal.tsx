@@ -6,16 +6,14 @@ import type { MediaItem } from "../carousel/MediaCard";
 import { cache } from "react";
 import { mapRowToMediaItem } from "@/lib/mappers";
 
-type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
+type AnimeDetailsRow = Database["public"]["Views"]["seasonal"]["Row"];
 
 // Cache the data fetching to deduplicate requests if rendered multiple times
 const getSeasonalAnime = cache(async () => {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("complete_anime_details_materialized")
+    .from("seasonal")
     .select("*")
-    .eq("season", "fall")
-    .eq("seasonYear", 2025)
     .limit(10)
     .order("post_hit", { ascending: false });
 

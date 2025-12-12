@@ -65,15 +65,17 @@ export function DownloadContainer({
     const selectedGroup = episodes.find((g) => g.quality === selectedQuality);
     
     const items: DownloadItem[] = selectedGroup
-      ? selectedGroup.episodes.map((ep) => ({
-          id: ep.id,
-          quality: ep.quality,
-          size: ep.size,
-          link: ep.link,
-          resolution: ep.quality,
-          episode: ep.episode_number,
-          thumbnail: ep.thumbnail,
-        }))
+      ? selectedGroup.episodes
+          .filter((ep) => ep.direct_link_status === "uploaded")
+          .map((ep) => ({
+            id: ep.id,
+            quality: ep.quality,
+            size: ep.size,
+            link: ep.direct_link,
+            resolution: ep.quality,
+            episode: ep.episode_number,
+            thumbnail: ep.thumbnail,
+          }))
       : [];
 
     // Sort by episode number

@@ -7,6 +7,7 @@ export type BottombarNavItem = {
   items?: {
     label: string;
     href: string;
+    description?: string;
   }[];
   href?: string;
 };

@@ -52,7 +52,7 @@ export function Filters({ genres }: FilterProps) {
   };
 
   return (
-    <div className="bg-black/40 backdrop-blur-xl p-6 rounded-3xl border border-white/5 shadow-2xl">
+    <div className="bg-background/80 backdrop-blur-xl p-6 rounded-3xl border border-border shadow-2xl">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Genre */}
         <Select value={genre} onValueChange={setGenre}>
@@ -131,7 +131,7 @@ export function Filters({ genres }: FilterProps) {
             variant="outline" 
             onClick={handleClear} 
             disabled={isPending}
-            className="h-12 px-8 rounded-xl border-white/10 hover:bg-white/5"
+            className="h-12 px-8 rounded-xl border-border hover:bg-accent"
         >
             پاک کردن
         </Button>

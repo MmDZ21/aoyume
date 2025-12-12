@@ -11,14 +11,15 @@ export interface RelatedAnimeJson {
   episodes_en: string;
   small_image: string;
   relation_type?: string;
+  dic_image_url: string;
 }
 
 export function mapJsonToMediaItem(item: RelatedAnimeJson): MediaItem {
   return {
     id: item.anime_id,
     title: item.dic_title,
-    image: item.small_image
-      ? `${process.env.IMAGE_URL}${item.small_image}`
+    image: item.dic_image_url
+      ? `${process.env.IMAGE_URL}${item.dic_image_url}`
       : "/images/placeholder.jpg",
     rating: parseFloat(item.dic_score) || 0,
     year: 0,
@@ -28,8 +29,9 @@ export function mapJsonToMediaItem(item: RelatedAnimeJson): MediaItem {
 }
 
 type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
+type SeasonalRow = Database["public"]["Views"]["seasonal"]["Row"];
 
-export function mapRowToMediaItem(item: AnimeDetailsRow): MediaItem {
+export function mapRowToMediaItem(item: AnimeDetailsRow | SeasonalRow): MediaItem {
   const year = item.air_date
     ? new Date(item.air_date).getFullYear()
     : new Date().getFullYear();

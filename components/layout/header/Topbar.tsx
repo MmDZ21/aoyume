@@ -19,7 +19,7 @@ const Topbar = () => {
         <Logo />
         <ul className="hidden items-center gap-12 md:flex">
           {topbarNavItems.map((item) => (
-            <li key={item.href} className="text-sm">
+            <li key={item.href} className="text-sm transition-colors hover:text-primary">
               <Link href={item.href}>{item.label}</Link>
             </li>
           ))}

@@ -61,9 +61,7 @@ export function ReusableTabs({
           value={tab.value}
           className={cn("mt-4", contentClassName)}
         >
-          <div className="bg-primary/5 border-primary/20 rounded-2xl border p-4 md:p-8">
-            {tab.content}
-          </div>
+          {tab.content}
         </TabsContent>
       ))}
     </Tabs>

@@ -10,7 +10,7 @@ export default function Loading() {
       </div>
       
       {/* Filters Skeleton */}
-      <div className="bg-black/40 backdrop-blur-xl p-6 rounded-3xl border border-white/5 shadow-2xl mb-8">
+      <div className="bg-background/80 backdrop-blur-xl p-6 rounded-3xl border border-border shadow-2xl mb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {Array.from({ length: 5 }).map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full rounded-xl" />

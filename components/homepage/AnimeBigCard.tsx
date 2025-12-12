@@ -25,7 +25,7 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
   const href = `/anime/${anime.anime_id}/${slugify(anime.dic_title!)}`;
 
   return (
-    <section className="relative my-8 h-auto w-full overflow-hidden rounded-2xl px-4 py-8 md:h-[500px] md:px-16 md:py-4">
+    <section className="relative my-8 h-auto w-full overflow-hidden rounded-2xl px-4 py-8 md:h-[500px] md:px-16 md:py-4 shadow-2xl">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image

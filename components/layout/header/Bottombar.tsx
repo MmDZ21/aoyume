@@ -26,13 +26,27 @@ const Bottombar = () => {
               )}
               {item.items && (
                 <NavigationMenuContent>
-                  <div className="grid grid-cols-2 gap-8 p-6 md:w-[400px]">
-                  {item.items.map((subItem) => (
-                    <NavigationMenuLink key={subItem.label} href={subItem.href}>
-                      {subItem.label}
-                    </NavigationMenuLink>
-                  ))}
-                  </div>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {item.items.map((subItem) => (
+                      <li key={subItem.label}>
+                        <NavigationMenuLink asChild>
+                          <a
+                            href={subItem.href}
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">
+                              {subItem.label}
+                            </div>
+                            {subItem.description && (
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                {subItem.description}
+                              </p>
+                            )}
+                          </a>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
                 </NavigationMenuContent>
               )}
             </NavigationMenuItem>

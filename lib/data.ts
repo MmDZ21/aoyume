@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { cache } from "react";
-import { EpisodesList } from "@/types/anime";
+import { AnilistResponse, EpisodesList, MalListResponse } from "@/types/anime";
 
 // Data fetching function with cache control
 export const getAnimeDetails = cache(async (id: number) => {
@@ -49,4 +49,30 @@ export const getAnimeEpisodes = cache(async (id: number) => {
   }));
 
   return episodesWithImages;
+});
+
+export const getALAnimeList = cache(async (username: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.functions.invoke<AnilistResponse>("al-anime-list", {
+    body: { username: username },
+  });
+
+  if (error) {
+    console.error("Supabase Error (Anime List):", error);
+    return [];
+  }
+  return data;
+});
+
+export const getMalAnimeList = cache(async (username: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.functions.invoke<MalListResponse>("mal-anime-list", {
+    body: { username: username },
+  });
+
+  if (error) {
+    console.error("Supabase Error (Mal Anime List):", error);
+    return [];
+  }
+  return data;
 });
