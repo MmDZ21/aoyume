@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import DirProvider from "@/lib/DirProvider";
 import { ThemeProvider } from "@/components/theme-provider";
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const yekanBakh = localFont({
   src: [
     {
