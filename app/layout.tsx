@@ -69,7 +69,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <DirProvider dir="rtl">{children}</DirProvider>
+          <DirProvider dir="rtl">{children}<SpeedInsights /></DirProvider>
         </ThemeProvider>
       </body>
     </html>
