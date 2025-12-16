@@ -14,7 +14,11 @@ interface AnimeBigCardProps {
 const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
   const title = anime.dic_title || anime.title_en_normalized || "Unknown";
   const latestUpdate = anime.last_update || "نامشخص";
-  const genres = anime.genre_names_en || [];
+  const genres = Array.isArray(anime.genres)
+    ? (anime.genres as unknown as { name_fa?: string }[])
+        .map((g) => g.name_fa)
+        .filter((g): g is string => !!g)
+    : anime.genre_names_en || [];
   const score = anime.dic_score || "0";
   const malScore = anime.dic_rating || "0"; // Assuming dic_rating is MAL score or similar numeric rating
   const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "نامشخص";
@@ -92,7 +96,7 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
           <div className="flex flex-col gap-6 text-right max-w-[280px]">
 
               <div className="flex flex-wrap gap-4 justify-start">
-                {genres.splice(0, 6).map((genre) => (
+                {genres.slice(0, 6).map((genre) => (
                   <span
                     key={genre}
                     className={cn(buttonVariants({ variant: "outline" }))}

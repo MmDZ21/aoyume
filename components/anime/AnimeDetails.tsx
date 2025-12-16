@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
 import { RatingBox } from "./RatingBox";
@@ -17,7 +18,11 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
   const coverImage = process.env.IMAGE_URL + (anime.wide_image || anime.dic_image_url || anime.mal_image_url || "/images/placeholder.jpg");
   const posterImage = process.env.IMAGE_URL + (anime.dic_image_url || anime.mal_image_url || "/images/placeholder.jpg");
   const title = anime.dic_title || anime.title_en_normalized || "Unknown Title";
-  const genres = anime.genre_names_en || [];
+  const genres = Array.isArray(anime.genres)
+    ? (anime.genres as unknown as { name_fa?: string; name_en?: string }[])
+        .filter((g) => g.name_fa && g.name_en)
+        .map((g) => ({ name: g.name_fa!, slug: g.name_en! }))
+    : (anime.genre_names_en || []).map((g) => ({ name: g, slug: g }));
   const latestUpdate = anime.last_update || "نامشخص";
   const score = anime.dic_rating || 0;
   const malScore = anime.dic_score ? parseFloat(anime.dic_score) : 0;
@@ -81,12 +86,13 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
 
               <div className="flex flex-wrap gap-4 justify-start">
                 {genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className={cn(buttonVariants({ variant: "outline" }))}
-                  >
-                    {genre}
-                  </span>
+                  <Link key={genre.slug} href={`/anime/genre/${genre.slug}`}>
+                    <span
+                      className={cn(buttonVariants({ variant: "outline" }))}
+                    >
+                      {genre.name}
+                    </span>
+                  </Link>
                 ))}
               </div>
 

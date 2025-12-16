@@ -1,19 +1,25 @@
 import { Metadata } from "next";
+import { getUserWatchlist } from "@/lib/data";
+import { createClient } from "@/utils/supabase/server";
+import { AnimeListClient } from "@/components/dashboard/anime-list/AnimeListClient";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "انیمه های من",
 };
 
 export default async function AnimeListPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">لیست انیمه های من</h1>
-      </div>
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-      <div className="text-muted-foreground rounded-xl border border-dashed p-8 text-center">
-          <p>شما هنوز هیچ انیمه‌ای به لیست خود اضافه نکرده‌اید.</p>
-      </div>
-    </div>
-  );
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  const watchlist = await getUserWatchlist(user.id);
+  const imageBaseUrl = process.env.IMAGE_URL || "";
+
+  return <AnimeListClient initialData={watchlist} userId={user.id} imageBaseUrl={imageBaseUrl} />;
 }

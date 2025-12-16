@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Pagination } from "swiper/modules";
+import { Navigation, Autoplay, Pagination, EffectFade } from "swiper/modules";
 import { Button } from "@/components/ui/button";
 import { Play, Bookmark, ChevronRight, ChevronLeft } from "lucide-react";
 
@@ -10,6 +10,7 @@ import { Play, Bookmark, ChevronRight, ChevronLeft } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
 export interface SliderItem {
   id: number;
@@ -29,7 +30,9 @@ const Slider = ({ slides }: SliderProps) => {
     <section className="relative h-[500px] w-full md:h-[400px]">
       <Swiper
         dir="rtl"
-        modules={[Navigation, Autoplay, Pagination]}
+        modules={[Navigation, Autoplay, Pagination, EffectFade]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
         navigation={{
           nextEl: ".image-swiper-button-next",
           prevEl: ".image-swiper-button-prev",

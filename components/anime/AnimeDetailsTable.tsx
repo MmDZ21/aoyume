@@ -15,7 +15,11 @@ interface DetailItem {
 }
 
 export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
-  const genres = anime.genre_names_en || [];
+  const genres = Array.isArray(anime.genres)
+    ? (anime.genres as unknown as { name_fa?: string }[])
+        .map((g) => g.name_fa)
+        .filter((g): g is string => !!g)
+    : anime.genre_names_en || [];
   const status = anime.dic_status === 1 ? "Airing" : "Finished";
   const episodes = anime.episodes_en || anime.episodes_fa || "0";
   const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "Unknown";

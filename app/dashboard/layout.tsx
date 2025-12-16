@@ -29,7 +29,7 @@ export default async function DashboardLayout({
              <Sidebar user={user} />
              
              {/* Main Content Column */}
-             <div className="flex-1">
+             <div className="flex-1 min-w-0">
                 {children}
              </div>
           </div>

@@ -72,6 +72,30 @@ export const getMalAnimeList = cache(async (username: string) => {
 
   if (error) {
     console.error("Supabase Error (Mal Anime List):", error);
+    return null; // Return null to indicate error, not empty array
+  }
+  
+  // Check if data is an array (expected format)
+  if (!Array.isArray(data)) {
+    console.error("MAL API returned non-array data:", data);
+    return null;
+  }
+  
+  return data;
+});
+
+export const getUserWatchlist = cache(async (userId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("user_anime_list")
+    .select(`
+      *,
+      anime:complete_anime_details_materialized(*)
+    `)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error fetching watchlist:", error);
     return [];
   }
   return data;

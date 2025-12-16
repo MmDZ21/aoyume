@@ -58,6 +58,7 @@ export interface ALMediaCoverImage {
 
 export interface ALMedia {
   id: number;
+  idMal?: number; // MAL ID if available
   title: ALMediaTitle;
   coverImage: ALMediaCoverImage;
   episodes?: number;
