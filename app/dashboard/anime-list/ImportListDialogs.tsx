@@ -14,8 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { bulkUpdateWatchlistFromAniList, bulkUpdateWatchlistFromMal } from "./actions";
+import { toast } from "sonner";
 
-export function ImportListDialogs() {
+interface ImportListDialogsProps {
+  onImportSuccess?: () => void;
+}
+
+export function ImportListDialogs({ onImportSuccess }: ImportListDialogsProps) {
   const [anilistOpen, setAnilistOpen] = useState(false);
   const [malOpen, setMalOpen] = useState(false);
   const [anilistUsername, setAnilistUsername] = useState("");
@@ -31,12 +36,23 @@ export function ImportListDialogs() {
     try {
       const result = await bulkUpdateWatchlistFromAniList(anilistUsername.trim());
       if (!result.success && "error" in result) {
-        console.error("AniList import failed:", result.error);
+        toast.error("خطا در وارد کردن از AniList", {
+          description: result.error,
+        });
+      } else if (result.success && "importedCount" in result) {
+        toast.success("وارد کردن موفقیت‌آمیز بود", {
+          description: `${result.importedCount || 0} انیمه وارد شد`,
+        });
+        setAnilistOpen(false);
+        setAnilistUsername("");
+        // Refresh the list
+        onImportSuccess?.();
       }
-      setAnilistOpen(false);
-      setAnilistUsername("");
     } catch (error) {
       console.error("Error importing AniList:", error);
+      toast.error("خطا در وارد کردن از AniList", {
+        description: error instanceof Error ? error.message : "خطای ناشناخته",
+      });
     } finally {
       setAnilistLoading(false);
     }
@@ -50,12 +66,23 @@ export function ImportListDialogs() {
     try {
       const result = await bulkUpdateWatchlistFromMal(malUsername.trim());
       if (!result.success && "error" in result) {
-        console.error("MAL import failed:", result.error);
+        toast.error("خطا در وارد کردن از MyAnimeList", {
+          description: result.error,
+        });
+      } else if (result.success && "importedCount" in result) {
+        toast.success("وارد کردن موفقیت‌آمیز بود", {
+          description: `${result.importedCount || 0} انیمه وارد شد`,
+        });
+        setMalOpen(false);
+        setMalUsername("");
+        // Refresh the list
+        onImportSuccess?.();
       }
-      setMalOpen(false);
-      setMalUsername("");
     } catch (error) {
       console.error("Error importing MAL:", error);
+      toast.error("خطا در وارد کردن از MyAnimeList", {
+        description: error instanceof Error ? error.message : "خطای ناشناخته",
+      });
     } finally {
       setMalLoading(false);
     }

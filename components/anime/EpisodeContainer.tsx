@@ -1,7 +1,12 @@
-import { Download, PlayCircle } from "lucide-react";
+"use client";
+
+import { Download, PlayCircle, Loader2 } from "lucide-react";
 import { buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
 
 export interface DownloadItem {
   id: string | number;
@@ -14,6 +19,40 @@ export interface DownloadItem {
 }
 
 const EpisodeContainer = ({ item }: { item: DownloadItem }) => {
+  const [loading, setLoading] = useState(false);
+  const supabase = createClient();
+
+  const handleDownload = async () => {
+    try {
+      setLoading(true);
+      console.log("Invoking web-get-link with id:", item.id);
+      
+      const { data, error } = await supabase.functions.invoke('web-get-link', {
+        body: { file_id: item.id }
+      });
+
+      if (error) {
+        console.error("Edge Function Error Details:", error);
+        throw error;
+      }
+
+      console.log("Edge Function Response:", data);
+      
+      if (data?.direct_link) {
+         window.open(data.direct_link, '_blank');
+      } else {
+        throw new Error("Link not found in response");
+      }
+
+    } catch (error: any) {
+      console.error("Error getting download link:", error);
+      const message = error?.context?.statusText || error?.message || "خطا در دریافت لینک دانلود";
+      toast.error(`خطا: ${message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="group relative flex aspect-video w-full flex-col justify-end overflow-hidden rounded-2xl bg-zinc-900 text-white shadow-md transition-all duration-300 hover:shadow-xl md:aspect-video">
       {/* Background Image */}
@@ -70,16 +109,21 @@ const EpisodeContainer = ({ item }: { item: DownloadItem }) => {
               </div>
 
               {/* Action Button */}
-              <a
-                href={item.link}
+              <button
+                onClick={handleDownload}
+                disabled={loading}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "w-full"
+                  "w-full cursor-pointer"
                 )}
               >
-                <Download className="h-4 w-4" />
-                دانلود مستقیم
-              </a>
+                {loading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Download className="mr-2 h-4 w-4" />
+                )}
+                {loading ? "در حال دریافت..." : "دانلود مستقیم"}
+              </button>
             </div>
           </div>
 

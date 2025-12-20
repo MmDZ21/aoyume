@@ -131,7 +131,7 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
         <TabContent title="نظرات کاربران">
           {/* 3. Wrap heavy client components in Suspense if they fetch their own data */}
           <Suspense fallback={<div>Loading comments...</div>}>
-            <CommentsSection />
+            <CommentsSection animeId={animeId} />
           </Suspense>
         </TabContent>
       ),

@@ -7,44 +7,70 @@ import {
   AlertTriangle,
   User,
   Eye,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
-
-export interface CommentType {
-  id: number;
-  author: string;
-  avatar?: string;
-  date: string;
-  content: string;
-  likes: number;
-  dislikes: number;
-  isSpoiler?: boolean;
-  isAdmin?: boolean;
-  replies?: CommentType[];
-}
+import { CommentWithReplies } from "@/types/comment";
+import { fetchReplies } from "@/app/actions/comment-actions";
 
 interface CommentItemProps {
-  comment: CommentType;
+  comment: CommentWithReplies;
   isReply?: boolean;
+  onReply?: (comment: CommentWithReplies) => void;
+  replyingToUser?: string | null;
 }
 
-export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
+export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser }: CommentItemProps) => {
   const {
-    author,
+    id,
+    name,
     avatar,
-    date,
+    created_at,
     content,
-    likes,
-    dislikes,
-    isSpoiler,
-    isAdmin,
-    replies,
+    is_spoil,
+    verified,
+    replies_count,
   } = comment;
 
   const [isSpoilerVisible, setIsSpoilerVisible] = useState(false);
+  const [replies, setReplies] = useState<CommentWithReplies[]>(
+    comment.replies || []
+  );
+  const [isLoadingReplies, setIsLoadingReplies] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+
+  const formattedDate = created_at
+    ? new Date(created_at).toLocaleDateString("fa-IR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "";
+
+  const handleLoadReplies = async () => {
+    if (replies.length > 0) {
+      setShowReplies(!showReplies);
+      return;
+    }
+
+    if (!id) return;
+
+    setIsLoadingReplies(true);
+    try {
+      const fetchedReplies = await fetchReplies(id);
+      if (fetchedReplies) {
+        setReplies(fetchedReplies);
+        setShowReplies(true);
+      }
+    } catch (error) {
+      console.error("Failed to load replies", error);
+    } finally {
+      setIsLoadingReplies(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -66,7 +92,7 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
             )}
           >
             {avatar ? (
-              <Image src={avatar} alt={author} fill className="object-cover" />
+              <Image src={avatar} alt={name || "User"} fill className="object-cover" />
             ) : (
               <div className="bg-secondary/50 text-muted-foreground flex h-full w-full items-center justify-center">
                 <User className={cn("h-1/2 w-1/2")} />
@@ -91,12 +117,13 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
                 <h4
                   className={cn(
                     "text-foreground text-sm font-bold md:text-base",
-                    isAdmin && "text-primary-foreground"
+                    verified && "text-primary"
                   )}
                 >
-                  {author}
+                  {name || "کاربر مهمان"}
                 </h4>
-                {isAdmin && (
+
+                {verified && (
                   <span className="bg-primary text-primary-foreground ring-primary/20 rounded-2xl px-2 py-0.5 text-[10px] font-medium whitespace-nowrap ring-1">
                     مدیریت
                   </span>
@@ -105,14 +132,19 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
                   •
                 </span>
                 <span className="text-muted-foreground text-[10px] whitespace-nowrap md:text-xs">
-                  {date}
+                  {formattedDate}
                 </span>
+                {replyingToUser && (
+                  <span className="text-muted-foreground text-xs bg-yellow-500/10 rounded-2xl px-2 py-0.5 text-[10px] font-medium whitespace-nowrap ring-1">
+                    در پاسخ به <span className="font-bold text-foreground">{replyingToUser}</span>
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Body */}
             <div className="relative space-y-2">
-              {isSpoiler && (
+              {is_spoil && (
                 <div className="inline-flex items-center rounded-md bg-rose-500/10 px-2 py-1 text-[10px] font-medium text-rose-500 md:text-xs dark:bg-rose-500/20">
                   حاوی اسپویل
                 </div>
@@ -122,13 +154,13 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
                 <p
                   className={cn(
                     "text-foreground/90 text-justify text-sm leading-8 transition-all duration-300 md:text-base md:leading-8",
-                    isSpoiler && !isSpoilerVisible && "blur-md select-none"
+                    is_spoil && !isSpoilerVisible && "blur-md select-none"
                   )}
                 >
                   {content}
                 </p>
 
-                {isSpoiler && !isSpoilerVisible && (
+                {is_spoil && !isSpoilerVisible && (
                   <div className="absolute inset-0 z-10 flex items-center justify-center">
                     <Button
                       variant="secondary"
@@ -145,14 +177,15 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
             </div>
           </div>
 
-          {/* Actions - Outside the bubble for a cleaner look */}
+          {/* Actions */}
           <div className="mt-2 flex flex-wrap items-center justify-end gap-1 px-2">
+            {/* Likes/Dislikes placeholders since not in DB yet */}
             <Button
               variant="ghost"
               size="sm"
               className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-emerald-500/10 hover:text-emerald-600 md:h-8 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-400"
             >
-              <span className="text-xs font-medium">{likes}</span>
+              <span className="text-xs font-medium">0</span>
               <ThumbsUp className="h-3 w-3 md:h-3.5 md:w-3.5" />
             </Button>
             <Button
@@ -160,7 +193,7 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
               size="sm"
               className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-rose-500/10 hover:text-rose-600 md:h-8 dark:hover:bg-rose-500/20 dark:hover:text-rose-400"
             >
-              <span className="text-xs font-medium">{dislikes}</span>
+              <span className="text-xs font-medium">0</span>
               <ThumbsDown className="h-3 w-3 md:h-3.5 md:w-3.5" />
             </Button>
 
@@ -169,11 +202,32 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
             <Button
               variant="ghost"
               size="sm"
+              onClick={() => onReply && onReply(comment)}
               className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-blue-500/10 hover:text-blue-600 md:h-8 dark:hover:bg-blue-500/20 dark:hover:text-blue-400"
             >
               <span className="text-xs">پاسخ</span>
               <Reply className="h-3 w-3 md:h-3.5 md:w-3.5" />
             </Button>
+
+            {/* View Replies Button */}
+            {(replies_count || 0) > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLoadReplies}
+                className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-primary/10 hover:text-primary md:h-8"
+                disabled={isLoadingReplies}
+              >
+                {isLoadingReplies ? (
+                  <span className="text-xs">در حال بارگذاری...</span>
+                ) : (
+                  <>
+                    <span className="text-xs">{showReplies ? "پنهان کردن پاسخ‌ها" : `مشاهده ${replies_count} پاسخ`}</span>
+                    <MessageCircle className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                  </>
+                )}
+              </Button>
+            )}
 
             <Button
               variant="ghost"
@@ -186,11 +240,17 @@ export const CommentItem = ({ comment, isReply = false }: CommentItemProps) => {
         </div>
       </div>
 
-      {/* Recursively render replies */}
-      {replies && replies.length > 0 && (
+      {/* Replies */}
+      {showReplies && replies.length > 0 && (
         <div className="relative space-y-4 border-none pr-2 md:pr-0">
           {replies.map((reply) => (
-            <CommentItem key={reply.id} comment={reply} isReply />
+            <CommentItem 
+              key={reply.id} 
+              comment={reply} 
+              isReply 
+              onReply={onReply}
+              replyingToUser={name} 
+            />
           ))}
         </div>
       )}

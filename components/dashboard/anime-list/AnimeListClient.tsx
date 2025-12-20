@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { AnimeListHeader } from "./AnimeListHeader";
 import { AnimeListSection } from "./AnimeListSection";
 import { ImportListDialogs } from "@/app/dashboard/anime-list/ImportListDialogs";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { fetchWatchlist } from "@/app/dashboard/anime-list/actions";
 
 export type WatchlistEntry = {
   id: number;
@@ -50,6 +52,26 @@ export function AnimeListClient({ initialData, userId, imageBaseUrl }: AnimeList
   const [entries, setEntries] = useState<WatchlistEntry[]>(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<number | "all">("all");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const router = useRouter();
+
+  const refreshList = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      // Refresh server component data
+      router.refresh();
+      
+      // Also fetch fresh data client-side
+      const result = await fetchWatchlist();
+      if (result.success && result.data) {
+        setEntries(result.data);
+      }
+    } catch (error) {
+      console.error("Error refreshing list:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [router]);
 
   const filteredEntries = useMemo(() => {
     let result = entries;
@@ -101,7 +123,7 @@ export function AnimeListClient({ initialData, userId, imageBaseUrl }: AnimeList
           <p className="text-muted-foreground mt-1 text-sm">مدیریت لیست تماشا و پیشرفت انیمه ها</p>
         </div>
         <div className="flex items-center gap-3">
-          <ImportListDialogs />
+          <ImportListDialogs onImportSuccess={refreshList} />
         </div>
       </div>
 

@@ -1,13 +1,13 @@
 "use server";
 
-import { getALAnimeList, getMalAnimeList } from "@/lib/data";
+import { getALAnimeList, getMalAnimeList, getUserWatchlist } from "@/lib/data";
 import { createClient } from "@/utils/supabase/server";
 import { ALMediaEntry, MalAnimeEntry } from "@/types/anime";
 
 export async function importAniList(username: string) {
   try {
     const data = await getALAnimeList(username);
-    
+
     if (Array.isArray(data)) {
       return { success: false, error: "Failed to fetch AniList data" };
     }
@@ -34,9 +34,20 @@ export async function importAniList(username: string) {
 export async function importMalList(username: string) {
   try {
     const data = await getMalAnimeList(username);
-    
+
     if (!Array.isArray(data)) {
-      return { success: false, error: "Failed to fetch MAL data" };
+      console.error("MAL data is not an array:", data);
+      return { 
+        success: false, 
+        error: `Unexpected data format from MAL API. Expected array, got ${typeof data}.` 
+      };
+    }
+
+    if (data.length === 0) {
+      return { 
+        success: false, 
+        error: "No anime entries found for this MAL username." 
+      };
     }
 
     return {
@@ -47,7 +58,7 @@ export async function importMalList(username: string) {
     console.error("Error in importMalList:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : "Unknown error occurred while importing MAL list",
     };
   }
 }
@@ -99,6 +110,22 @@ function mapMalToOperations(entries: MalAnimeEntry[]): any[] {
   }));
 }
 
+// Extract notes from MAL entries (separate from operations since RPC doesn't handle notes)
+function extractMalNotes(
+  entries: MalAnimeEntry[]
+): Array<{ anime_id: number; notes: string | null }> {
+  return entries
+    .map((entry) => {
+      const notes = entry.editable_notes || entry.notes || null;
+      const notesValue = notes && notes.trim() !== "" ? notes.trim() : null;
+      return {
+        anime_id: entry.anime_id,
+        notes: notesValue,
+      };
+    })
+    .filter((item) => item.notes !== null); // Only include entries with notes
+}
+
 // Bulk update watchlist with AniList data
 export async function bulkUpdateWatchlistFromAniList(username: string) {
   try {
@@ -119,10 +146,13 @@ export async function bulkUpdateWatchlistFromAniList(username: string) {
     const allEntries = importResult.data?.allEntries || [];
     const operations = mapAniListToOperations(allEntries);
 
-    const { data, error } = await supabase.rpc("bulk_update_watchlist_with_mal_id", {
-      operations,
-      user_id_param: user.id,
-    });
+    const { data, error } = await supabase.rpc(
+      "bulk_update_watchlist_with_mal_id",
+      {
+        operations,
+        user_id_param: user.id,
+      }
+    );
 
     if (error) {
       console.error("Error in bulk_update_watchlist_with_mal_id:", error);
@@ -165,15 +195,60 @@ export async function bulkUpdateWatchlistFromMal(username: string) {
       : [];
 
     const operations = mapMalToOperations(malEntries);
+    const notesEntries = extractMalNotes(malEntries);
 
-    const { data, error } = await supabase.rpc("bulk_update_watchlist_with_mal_id", {
-      operations,
-      user_id_param: user.id,
-    });
+    // Bulk update watchlist entries
+    const { data, error } = await supabase.rpc(
+      "bulk_update_watchlist_with_mal_id",
+      {
+        operations,
+        user_id_param: user.id,
+      }
+    );
 
     if (error) {
       console.error("Error in bulk_update_watchlist_with_mal_id:", error);
       return { success: false, error: error.message };
+    }
+
+    // Update notes separately (RPC doesn't handle notes)
+    if (notesEntries.length > 0) {
+      // Get anime_id for each MAL ID
+      const { data: animeData, error: animeError } = await supabase
+        .from("animes")
+        .select("anime_id, mal_id")
+        .in(
+          "mal_id",
+          notesEntries.map((e) => e.anime_id)
+        );
+
+      if (!animeError && animeData) {
+        // Create a map of mal_id -> anime_id
+        const malToAnimeId = new Map(
+          animeData.map((a) => [a.mal_id, a.anime_id])
+        );
+
+        // Update notes for each entry
+        const notesUpdates = notesEntries
+          .map((entry) => {
+            const animeId = malToAnimeId.get(entry.anime_id);
+            if (!animeId) return null;
+            return { animeId, notes: entry.notes };
+          })
+          .filter(
+            (item): item is { animeId: number; notes: string | null } =>
+              item !== null
+          );
+
+        // Batch update notes
+        for (const { animeId, notes } of notesUpdates) {
+          await supabase
+            .from("user_anime_list")
+            .update({ notes })
+            .eq("anime_id", animeId)
+            .eq("user_id", user.id);
+        }
+      }
     }
 
     return {
@@ -236,6 +311,32 @@ export async function updateWatchlistEntry(
     return { success: true, data };
   } catch (error) {
     console.error("Error in updateWatchlistEntry:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+// Fetch watchlist for client-side refresh
+export async function fetchWatchlist() {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { success: false, error: "User not authenticated" };
+    }
+
+    const watchlist = await getUserWatchlist(user.id);
+    return {
+      success: true,
+      data: watchlist,
+    };
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

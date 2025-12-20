@@ -3,7 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import DirProvider from "@/lib/DirProvider";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Toaster } from "@/components/ui/sonner";
 const yekanBakh = localFont({
   src: [
     {
@@ -70,6 +71,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <DirProvider dir="rtl">{children}<SpeedInsights /></DirProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

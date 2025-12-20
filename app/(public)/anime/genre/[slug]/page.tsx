@@ -27,7 +27,7 @@ export default async function GenrePage({ params, searchParams }: Props) {
   const { slug } = await params;
   const sp = await searchParams;
   const genre = decodeURIComponent(slug);
-  
+
   console.log(`[GenrePage] Fetching genre: "${genre}" (slug: "${slug}")`);
 
   const sort = typeof sp.sort === "string" ? sp.sort : "newest";
@@ -38,8 +38,8 @@ export default async function GenrePage({ params, searchParams }: Props) {
 
   // Normalize genre name from URL to match DB casing
   const { data: allGenres } = await supabase.rpc("get_all_genre");
-  const matchedGenre = allGenres?.find(g => 
-    g.english_name.toLowerCase() === genre.toLowerCase()
+  const matchedGenre = allGenres?.find(
+    (g) => g.english_name.toLowerCase() === genre.toLowerCase()
   );
   const queryGenre = matchedGenre ? matchedGenre.english_name : genre;
 
@@ -56,7 +56,10 @@ export default async function GenrePage({ params, searchParams }: Props) {
   if (sort === "popular") {
     queryBuilder = queryBuilder.order("post_hit", { ascending: false });
   } else if (sort === "score") {
-    queryBuilder = queryBuilder.order("dic_rating", { ascending: false, nullsFirst: false });
+    queryBuilder = queryBuilder.order("dic_rating", {
+      ascending: false,
+      nullsFirst: false,
+    });
   } else {
     // Default newest
     queryBuilder = queryBuilder.order("created_at", { ascending: false });
@@ -81,13 +84,13 @@ export default async function GenrePage({ params, searchParams }: Props) {
   const displayGenre = matchedGenre ? matchedGenre.persian_name : genre;
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
-       <div className="flex flex-col items-center justify-center space-y-2 mb-8 md:mb-12">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-primary">
+    <div className="container mx-auto min-h-screen px-4 py-8">
+      <div className="mb-8 flex flex-col items-center justify-center space-y-2 md:mb-12">
+        <h1 className="text-primary text-3xl font-extrabold tracking-tight md:text-4xl">
           انیمه‌های ژانر {displayGenre}
         </h1>
         <p className="text-muted-foreground text-lg">
-           لیست کامل انیمه‌های {displayGenre} با زیرنویس فارسی
+          لیست کامل انیمه‌های {displayGenre} با زیرنویس فارسی
         </p>
       </div>
 
@@ -95,18 +98,18 @@ export default async function GenrePage({ params, searchParams }: Props) {
 
       {items.length > 0 ? (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-5 xl:grid-cols-6">
             {items.map((item) => (
               <MediaCard key={item.id} item={item} />
             ))}
           </div>
-          
+
           <div className="mt-8">
             <Pagination currentPage={currentPage} totalPages={totalPages} />
           </div>
         </>
       ) : (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className="text-muted-foreground py-12 text-center">
           هیچ انیمه‌ای در این ژانر یافت نشد.
         </div>
       )}
