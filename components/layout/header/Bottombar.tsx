@@ -33,7 +33,7 @@ const Bottombar = () => {
                           <NavigationMenuLink asChild>
                             <a
                               href={subItem.href}
-                              className="block select-none rounded-xl p-3.5 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 focus:bg-primary/10 hover:shadow-lg hover:scale-[1.02] border border-border/50 hover:border-primary/40 bg-card/50 backdrop-blur-sm text-center hover:bg-primary/15"
+                              className="block select-none rounded-xl p-3.5 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 focus:bg-primary/10 hover:shadow-lg border border-border/50 hover:border-primary/40 bg-card/50 backdrop-blur-sm text-center hover:bg-primary/15"
                             >
                               <div className="text-sm transition-colors font-medium">
                                 {subItem.label}
