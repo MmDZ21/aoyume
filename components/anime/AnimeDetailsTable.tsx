@@ -108,27 +108,37 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4" dir="rtl">
+    <div className="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-4" dir="rtl">
       {items.map((item, index) => {
+        const isScore = item.label.includes("امتیاز");
+        const isStatus = item.label === "وضعیت";
+        
         return (
           <div
             key={index}
             className={cn(
-              "group bg-primary/5 dark:bg-primary/20 hover:bg-primary/10 border-border/50 hover:border-primary/10 relative overflow-hidden rounded-2xl border p-4 transition-all duration-300",
+              "group relative overflow-hidden rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm p-5 shadow-sm transition-all duration-300 hover:border-primary/50 hover:bg-card hover:shadow-md",
+              isScore && "hover:border-chart-5/50",
+              isStatus && "hover:border-chart-4/50",
               item.className
             )}
           >
-            <div className="relative z-10 flex flex-col gap-1">
-              <div className="text-muted-foreground mb-1 flex items-center gap-2">
-                <span className="text-xs font-medium">{item.label}</span>
-              </div>
-              <div className="text-foreground line-clamp-1 text-sm font-semibold">
+            {/* Subtle top accent */}
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-muted-foreground/60">
+                {item.label}
+              </span>
+              <div className={cn(
+                "line-clamp-2 text-sm font-semibold leading-relaxed",
+                isScore && "text-chart-5",
+                isStatus && status === "Airing" ? "text-chart-4" : "text-foreground",
+                !isScore && !isStatus && "text-foreground"
+              )}>
                 {item.value}
               </div>
             </div>
-
-            {/* Decorative background gradient on hover */}
-            <div className="from-primary/5 absolute inset-0 bg-linear-to-br to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
           </div>
         );
       })}
