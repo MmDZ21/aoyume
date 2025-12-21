@@ -95,11 +95,11 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
           {/* 3. Stats & Metadata (Left side in RTL) */}
           <div className="flex flex-col gap-6 text-right max-w-[280px]">
 
-              <div className="flex flex-wrap gap-4 justify-start">
+              <div className="flex flex-wrap gap-2.5 justify-start items-center">
                 {genres.slice(0, 6).map((genre) => (
                   <span
                     key={genre}
-                    className={cn(buttonVariants({ variant: "outline" }), "border-white/30 text-white bg-white/10 hover:bg-white/20 hover:text-white")}
+                    className={cn(buttonVariants({ variant: "outline", size: "sm" }), "border-white/30 text-white bg-white/10 hover:bg-white/20 hover:text-white whitespace-nowrap")}
                   >
                     {genre}
                   </span>
