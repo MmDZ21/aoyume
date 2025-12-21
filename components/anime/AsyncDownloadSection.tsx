@@ -18,13 +18,13 @@ export function DownloadSectionSkeleton() {
   return (
     <div className="space-y-6">
        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <Skeleton className="h-8 w-32 bg-gray-900/20" />
-          <Skeleton className="h-10 w-full md:w-48 bg-gray-900/20" />
+          <Skeleton className="h-8 w-32 bg-muted/20" />
+          <Skeleton className="h-10 w-full md:w-48 bg-muted/20" />
        </div>
        <div className="space-y-4">
-          <Skeleton className="h-16 w-full rounded-xl bg-gray-900/20" />
-          <Skeleton className="h-16 w-full rounded-xl bg-gray-900/20" />
-          <Skeleton className="h-16 w-full rounded-xl bg-gray-900/20" />
+          <Skeleton className="h-16 w-full rounded-xl bg-muted/20" />
+          <Skeleton className="h-16 w-full rounded-xl bg-muted/20" />
+          <Skeleton className="h-16 w-full rounded-xl bg-muted/20" />
        </div>
     </div>
   )

@@ -76,7 +76,7 @@ export default async function CommentsPage(props: {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 border-b pb-4">
-        <div className="rounded-lg bg-orange-500/10 p-2 text-orange-600">
+        <div className="rounded-lg bg-chart-5/10 p-2 text-chart-5">
           <MessageSquareMore className="h-6 w-6" />
         </div>
         <div>

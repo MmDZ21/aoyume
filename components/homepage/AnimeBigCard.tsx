@@ -45,7 +45,7 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
       <div className="relative z-10 container mx-auto flex h-full flex-col justify-center px-4">
         {/* Header */}
         <div className="mb-8 flex gap-4 items-center justify-between">
-          <div className="flex items-center gap-2 text-2xl font-bold text-white">
+          <div className="flex items-center gap-2 text-2xl font-bold text-foreground">
             <PlayCircle className="text-primary size-8" />
             <span>منتخب هفته</span>
           </div>
@@ -66,21 +66,21 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
             </div>
             <Button
               size="icon"
-              className="absolute right-4 bottom-4 rounded-xl border border-white/20 bg-white/20 text-white backdrop-blur-md transition-colors hover:bg-white/40"
+              className="absolute right-4 bottom-4 rounded-xl border border-foreground/20 bg-foreground/20 text-foreground backdrop-blur-md transition-colors hover:bg-foreground/40"
             >
               <Plus className="size-6" />
             </Button>
           </div>
 
           {/* 2. Description (Center) */}
-          <div className="flex flex-1 flex-col text-right text-white">
+          <div className="flex flex-1 flex-col text-right text-foreground">
             <h2
               className="mb-2 text-center text-3xl font-bold md:text-right"
               dir="ltr"
             >
               {anime.dic_title || "Unknown"}
             </h2>
-            <p className="mb-8 text-justify leading-loose text-gray-200/90 md:pl-12 line-clamp-4">
+            <p className="mb-8 text-justify leading-loose text-foreground md:pl-12 line-clamp-4">
               {description}
             </p>
             <div className="flex justify-center md:justify-start">
@@ -110,13 +110,13 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز AoYume :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-yellow-500">{score}</span> از 10
+                    <span className="font-bold text-chart-5">{score}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز MyAnimeList :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-yellow-500">{malScore}</span> از 10
+                    <span className="font-bold text-chart-5">{malScore}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">

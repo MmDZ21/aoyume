@@ -39,11 +39,11 @@ export function RatingBox({ currentRating, onRatingChange }: RatingBoxProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex gap-4 h-full flex-1 flex-col rounded-xl border border-primary/10 dark:border-white/10 bg-primary/10 dark:bg-white/5 p-6 backdrop-blur-sm transition-all hover:dark:border-white/20 hover:dark:bg-white/10 hover:border-primary/20 hover:bg-primary/20">
-        <div className="flex flex-1 flex-col items-center justify-center gap-2">
+      <div className="flex gap-4 h-full min-h-[150px] w-full sm:flex-1 flex-col rounded-xl border border-primary/20 dark:border-primary/30 bg-primary/10 dark:bg-primary/10 p-6 backdrop-blur-sm transition-all hover:dark:border-primary/40 hover:dark:bg-primary/15 hover:border-primary/30 hover:bg-primary/15">
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 min-h-[60px]">
           {currentRating ? (
             <div className="flex items-baseline gap-1">
-              <span className="text-3xl font-bold text-yellow-500">{currentRating}</span>
+              <span className="text-3xl font-bold text-chart-5">{currentRating}</span>
               <span className="text-sm text-muted-foreground">/10</span>
             </div>
           ) : (
@@ -52,7 +52,7 @@ export function RatingBox({ currentRating, onRatingChange }: RatingBoxProps) {
           <span className="text-xs font-medium text-muted-foreground">امتیاز من</span>
         </div>
         <DialogTrigger asChild>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-secondary/80 dark:text-secondary-foreground hover:dark:bg-secondary/60">
             تغییر
           </Button>
         </DialogTrigger>

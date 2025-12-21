@@ -319,7 +319,7 @@ export default function SettingsPage() {
               </div>
 
               {message && (
-                <div className={`text-sm ${message.type === "success" ? "text-green-500" : "text-red-500"}`}>
+                <div className={`text-sm ${message.type === "success" ? "text-chart-4" : "text-destructive"}`}>
                   {message.text}
                 </div>
               )}

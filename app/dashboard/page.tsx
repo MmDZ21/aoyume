@@ -25,10 +25,10 @@ export default function DashboardPage() {
                 </div>
               </div>
           </div>
-           <div className="rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-blue-500/20 group">
+           <div className="rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/20 group">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-500/10 rounded-xl group-hover:scale-110 transition-transform duration-200">
-                   <Ticket className="h-6 w-6 text-blue-500" />
+                <div className="p-3 bg-primary/10 rounded-xl group-hover:scale-110 transition-transform duration-200">
+                   <Ticket className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                    <h3 className="font-medium text-sm text-muted-foreground">تیکت های باز</h3>
@@ -36,10 +36,10 @@ export default function DashboardPage() {
                 </div>
               </div>
           </div>
-           <div className="rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-green-500/20 group">
+           <div className="rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-chart-4/20 group">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-500/10 rounded-xl group-hover:scale-110 transition-transform duration-200">
-                   <Activity className="h-6 w-6 text-green-500" />
+                <div className="p-3 bg-chart-4/10 rounded-xl group-hover:scale-110 transition-transform duration-200">
+                   <Activity className="h-6 w-6 text-chart-4" />
                 </div>
                 <div>
                    <h3 className="font-medium text-sm text-muted-foreground">فعالیت اخیر</h3>

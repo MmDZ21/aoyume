@@ -104,7 +104,7 @@ export function UnverifiedCommentsList({
                     </span>
                 </div>
                 {comment.animes && (
-                     <Link href={`/anime/${comment.anime_id}/${slugify(comment.animes.dic_title || comment.animes.title_english || '')}`} className="text-xs text-blue-500 hover:underline flex items-center gap-1" target="_blank">
+                     <Link href={`/anime/${comment.anime_id}/${slugify(comment.animes.dic_title || comment.animes.title_english || '')}`} className="text-xs text-primary hover:underline flex items-center gap-1" target="_blank">
                         {comment.animes.dic_title || comment.animes.title_english || `Anime #${comment.anime_id}`}
                         <ExternalLink className="h-3 w-3" />
                      </Link>
@@ -130,7 +130,7 @@ export function UnverifiedCommentsList({
                 variant="default"
                 size="sm"
                 onClick={() => handleVerify(comment.id)}
-                className="h-8 text-xs gap-1 bg-green-600 hover:bg-green-700"
+                className="h-8 text-xs gap-1 bg-chart-4 hover:bg-chart-4/90"
               >
                 <Check className="h-3.5 w-3.5" />
                 تأیید

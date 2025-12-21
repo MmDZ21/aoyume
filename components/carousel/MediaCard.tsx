@@ -26,7 +26,7 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
     <HoverCard openDelay={200} closeDelay={200}>
       <HoverCardTrigger asChild>
         <Link href={href}>
-          <div className="group relative aspect-2/3 w-full cursor-pointer overflow-hidden rounded-2xl bg-gray-900">
+          <div className="group relative aspect-2/3 w-full cursor-pointer overflow-hidden rounded-2xl bg-muted">
             {/* Image */}
             <Image
               src={item.image}
@@ -43,7 +43,7 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
             <div className="absolute inset-x-0 bottom-0 p-4">
               <h3
                 dir="ltr"
-                className="mb-4 line-clamp-2 text-center text-xl font-bold tracking-wider text-white uppercase shadow-black drop-shadow-lg"
+                className="mb-4 line-clamp-2 text-center text-xl font-bold tracking-wider text-white uppercase shadow-lg drop-shadow-lg"
               >
                 {item.title}
               </h3>
@@ -52,7 +52,7 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
               <div className="absolute right-4 bottom-4 translate-y-0 transition-all duration-300 group-hover:-translate-y-1">
                 <Button
                   size="icon"
-                  className="hover:bg-primary hover:text-primary-foreground h-10 w-10 rounded-2xl bg-white/20 text-white backdrop-blur-sm"
+                  className="hover:bg-primary hover:text-primary-foreground h-10 w-10 rounded-2xl bg-white/20 text-white backdrop-blur-sm dark:bg-white/10 dark:text-white"
                 >
                   <Plus className="size-6" />
                 </Button>
@@ -62,7 +62,7 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
         </Link>
       </HoverCardTrigger>
       <HoverCardContent
-        className="w-72 rounded-2xl border-white/10 bg-gray-900/95 text-white backdrop-blur-md md:w-80"
+        className="w-72 rounded-2xl border-border bg-card/95 text-card-foreground backdrop-blur-md md:w-80"
         side="left"
         align="start"
         sideOffset={-10}
@@ -70,13 +70,13 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-2">
             <h4 className="text-lg font-bold">{item.title}</h4>
-            <div className="bg-primary/20 text-primary flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium">
+            <div className="bg-primary/15 text-primary flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium ring-1 ring-primary/20">
               <Star className="size-3 fill-current" />
               {item.rating}
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs text-gray-300">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="size-3" />
               {item.year}
@@ -85,12 +85,12 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
               <Clock className="size-3" />
               {item.duration}
             </div>
-            <div className="rounded border border-gray-600 px-1.5 py-0.5 text-[10px] uppercase">
+            <div className="rounded border border-border px-1.5 py-0.5 text-[10px] uppercase">
               HD
             </div>
           </div>
 
-          <p className="line-clamp-4 text-sm leading-relaxed text-gray-300">
+          <p className="line-clamp-4 text-sm leading-relaxed text-muted-foreground">
             {item.description}
           </p>
 
@@ -101,7 +101,7 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
             </Button>
             <Button
               variant="outline"
-              className="h-9 flex-1 rounded-xl border-white/20 bg-transparent text-xs hover:bg-white/10 hover:text-white md:text-sm"
+              className="h-9 flex-1 rounded-xl border-border bg-transparent text-xs hover:bg-accent hover:text-accent-foreground md:text-sm"
               asChild
             >
               <Link href={href}>مشاهده جزئیات</Link>

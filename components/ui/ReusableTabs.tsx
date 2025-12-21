@@ -46,7 +46,7 @@ export function ReusableTabs({
             key={tab.value}
             value={tab.value}
             className={cn(
-              "hover:bg-primary/20 dark:hover:bg-primary/40 data-[state=active]:border-primary data-[state=active]:bg-primary dark:data-[state=active]:border-primary dark:data-[state=active]:bg-primary bg-primary/5 dark:bg-primary/20 text-muted-foreground dark:text-muted-foreground border-primary/10 dark:border-primary/30 cursor-pointer rounded-2xl border py-3 text-center transition-all hover:text-white data-[state=active]:text-white data-[state=active]:shadow-lg dark:hover:text-white dark:data-[state=active]:text-white dark:data-[state=active]:shadow-lg md:text-left",
+              "hover:bg-primary/20 dark:hover:bg-primary/40 data-[state=active]:border-primary data-[state=active]:bg-primary dark:data-[state=active]:border-primary dark:data-[state=active]:bg-primary bg-primary/5 dark:bg-primary/20 text-muted-foreground dark:text-muted-foreground border-primary/10 dark:border-primary/30 cursor-pointer rounded-2xl border py-3 text-center transition-all hover:text-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg dark:hover:text-primary dark:data-[state=active]:text-primary-foreground dark:data-[state=active]:shadow-lg md:text-left",
               "w-full md:w-auto",
               triggerClassName
             )}

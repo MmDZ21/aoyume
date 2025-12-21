@@ -73,7 +73,7 @@ export const CommentsList = ({
       <div className="space-y-6">
         <div className="flex items-center gap-2 pb-2">
           <h3 className="text-foreground text-lg font-bold">نظرات کاربران</h3>
-          <span className="bg-secondary text-muted-foreground rounded-full px-2 py-0.5 text-xs font-medium">
+          <span className="bg-secondary text-white rounded-full px-2 py-0.5 text-xs font-medium">
             {totalCount}
           </span>
         </div>

@@ -47,7 +47,7 @@ export function AnimeListItem({ entry, onUpdateEntry, imageBaseUrl }: AnimeListI
           <div className="flex justify-between items-start gap-2">
             <div className="min-w-0">
               <Link href={animeHref} className="block truncate">
-                <h3 className="truncate font-semibold text-base sm:text-lg text-foreground/90 hover:text-primary transition-colors">{title}</h3>
+                <h3 className="truncate font-semibold text-base sm:text-lg text-foreground hover:text-primary transition-colors">{title}</h3>
               </Link>
               <p className="text-xs text-muted-foreground font-medium">
                 {anime?.air_date || "Unknown Year"}
@@ -60,7 +60,7 @@ export function AnimeListItem({ entry, onUpdateEntry, imageBaseUrl }: AnimeListI
           <div className="flex items-center gap-4 sm:gap-6 mt-1">
             {/* Score */}
             <div className="flex items-center gap-1.5 bg-accent/50 px-2.5 py-1 rounded-full">
-              <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+              <Star className="w-3.5 h-3.5 text-chart-5 fill-chart-5" />
               <span className="text-sm font-semibold">{entry.score || "-"}</span>
             </div>
 

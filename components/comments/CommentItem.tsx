@@ -87,7 +87,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
           )}
           <div
             className={cn(
-              "border-border relative overflow-hidden rounded-full border shadow-sm transition-transform duration-300 group-hover:scale-105 dark:border-gray-800",
+              "border-border relative overflow-hidden rounded-full border shadow-sm transition-transform duration-300 group-hover:scale-105",
               isReply ? "h-8 w-8 md:h-10 md:w-10" : "h-10 w-10 md:h-12 md:w-12"
             )}
           >
@@ -128,15 +128,15 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
                     مدیریت
                   </span>
                 )}
-                <span className="text-muted-foreground/60 hidden text-xs sm:inline">
+                <span className="text-muted-foreground hidden text-xs sm:inline">
                   •
                 </span>
                 <span className="text-muted-foreground text-[10px] whitespace-nowrap md:text-xs">
                   {formattedDate}
                 </span>
                 {replyingToUser && (
-                  <span className="text-muted-foreground text-xs bg-yellow-500/10 rounded-2xl px-2 py-0.5 text-[10px] font-medium whitespace-nowrap ring-1">
-                    در پاسخ به <span className="font-bold text-foreground">{replyingToUser}</span>
+                  <span className="text-foreground text-xs bg-chart-5/20 rounded-2xl px-2 py-0.5 text-[10px] font-medium whitespace-nowrap ring-1 ring-chart-5/20">
+                    در پاسخ به <span className="font-bold">{replyingToUser}</span>
                   </span>
                 )}
               </div>
@@ -145,7 +145,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
             {/* Body */}
             <div className="relative space-y-2">
               {is_spoil && (
-                <div className="inline-flex items-center rounded-md bg-rose-500/10 px-2 py-1 text-[10px] font-medium text-rose-500 md:text-xs dark:bg-rose-500/20">
+                <div className="inline-flex items-center rounded-md bg-destructive/10 px-2 py-1 text-[10px] font-medium text-destructive md:text-xs">
                   حاوی اسپویل
                 </div>
               )}
@@ -153,7 +153,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
               <div className="relative">
                 <p
                   className={cn(
-                    "text-foreground/90 text-justify text-sm leading-8 transition-all duration-300 md:text-base md:leading-8",
+                    "text-foreground text-justify text-sm leading-8 transition-all duration-300 md:text-base md:leading-8",
                     is_spoil && !isSpoilerVisible && "blur-md select-none"
                   )}
                 >
@@ -183,7 +183,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
             <Button
               variant="ghost"
               size="sm"
-              className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-emerald-500/10 hover:text-emerald-600 md:h-8 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-400"
+              className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-chart-4/10 hover:text-chart-4 md:h-8"
             >
               <span className="text-xs font-medium">0</span>
               <ThumbsUp className="h-3 w-3 md:h-3.5 md:w-3.5" />
@@ -191,7 +191,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
             <Button
               variant="ghost"
               size="sm"
-              className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-rose-500/10 hover:text-rose-600 md:h-8 dark:hover:bg-rose-500/20 dark:hover:text-rose-400"
+              className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-destructive/10 hover:text-destructive md:h-8"
             >
               <span className="text-xs font-medium">0</span>
               <ThumbsDown className="h-3 w-3 md:h-3.5 md:w-3.5" />
@@ -203,7 +203,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
               variant="ghost"
               size="sm"
               onClick={() => onReply && onReply(comment)}
-              className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-blue-500/10 hover:text-blue-600 md:h-8 dark:hover:bg-blue-500/20 dark:hover:text-blue-400"
+              className="text-muted-foreground h-7 gap-1.5 rounded-full px-2 hover:bg-primary/10 hover:text-primary md:h-8"
             >
               <span className="text-xs">پاسخ</span>
               <Reply className="h-3 w-3 md:h-3.5 md:w-3.5" />
@@ -232,7 +232,7 @@ export const CommentItem = ({ comment, isReply = false, onReply, replyingToUser 
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground/50 h-7 w-7 rounded-full hover:text-rose-500 md:h-8 md:w-8"
+              className="text-muted-foreground h-7 w-7 rounded-full hover:text-destructive md:h-8 md:w-8"
             >
               <AlertTriangle className="h-3 w-3 md:h-3.5 md:w-3.5" />
             </Button>

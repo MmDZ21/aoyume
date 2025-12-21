@@ -54,15 +54,15 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
       <div className="relative z-10 flex flex-col gap-8 p-6 md:p-10">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:justify-between">
           {/* Stats Section (Desktop: Right, Mobile: Bottom) */}
-          <div className="order-2 flex shrink-0 flex-col md:flex-row gap-4 lg:order-2 lg:w-64 lg:flex-col">
+          <div className="order-2 flex shrink-0 flex-col items-center sm:items-stretch sm:flex-row gap-4 lg:order-2 lg:w-64 lg:flex-col">
             <RatingBox currentRating={8} />
             <WatchStatusBox currentStatus={"watching"} />
           </div>
 
           {/* Poster and Info Section Grouped Together */}
-          <div className="order-1 flex flex-col gap-6 lg:flex-row lg:items-start">
+          <div className="order-1 flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:flex-1">
             {/* Poster Section */}
-            <div className="group relative mx-auto shrink-0 lg:mx-0">
+            <div className="group relative shrink-0">
               <div className="relative h-96 w-64 overflow-hidden rounded-2xl shadow-2xl">
                 <Image
                   src={posterImage}
@@ -77,14 +77,15 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
             </div>
 
             {/* Info Section */}
-            <div className="flex flex-col gap-6 text-right max-w-sm">
-              <h1 className="text-2xl font-bold text-center md:text-start md:text-3xl">{title}</h1>
+            <div className="flex flex-col gap-6 text-center w-full sm:text-right sm:max-w-sm">
+              <h1 className="text-2xl font-bold sm:text-start md:text-3xl">{title}</h1>
 
-              <div className={cn(buttonVariants({ variant: "default" }))}>
-                <span className="text-muted-foreground">آخرین بروزرسانی: </span>{latestUpdate}
+              <div className={cn(buttonVariants({ variant: "default" }), "justify-center text-center sm:justify-center sm:text-left")}>
+                <span className="text-primary-foreground/90">آخرین بروزرسانی: </span>
+                <span className="text-primary-foreground">{latestUpdate}</span>
               </div>
 
-              <div className="flex flex-wrap gap-4 justify-start">
+              <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
                 {genres.map((genre) => (
                   <Link key={genre.slug} href={`/anime/genre/${genre.slug}`}>
                     <span
@@ -96,17 +97,17 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                 ))}
               </div>
 
-              <div className="grid w-full max-w-md grid-cols-1 gap-y-8 text-sm">
+              <div className="grid w-full max-w-md mx-auto sm:mx-0 grid-cols-1 gap-y-4 sm:gap-y-8 text-sm">
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز AoYume :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-yellow-500">{score}</span> از 10
+                    <span className="font-bold text-chart-5">{score}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز MyAnimeList :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-yellow-500">{malScore}</span> از 10
+                    <span className="font-bold text-chart-5">{malScore}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">

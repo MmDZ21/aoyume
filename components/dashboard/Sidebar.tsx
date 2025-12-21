@@ -143,7 +143,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
               className={cn(
                 "absolute -inset-1 rounded-full opacity-70 blur-md transition-all duration-500",
                 isVip
-                  ? "bg-linear-to-br from-yellow-400 to-amber-600"
+                  ? "bg-linear-to-br from-chart-5/60 to-chart-5"
                   : "from-primary/40 to-primary/10 bg-linear-to-br"
               )}
             />
@@ -154,7 +154,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
               </AvatarFallback>
             </Avatar>
             {isVip && (
-              <div className="border-background absolute -top-1 -right-1 rounded-full border-2 bg-yellow-500 p-1 text-white shadow-lg">
+              <div className="border-background absolute -top-1 -right-1 rounded-full border-2 bg-chart-5 p-1 text-primary-foreground shadow-lg">
                 <Crown className="h-3 w-3 fill-current" />
               </div>
             )}
@@ -171,7 +171,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors",
                 isVip
-                  ? "border border-yellow-500/20 bg-yellow-500/10 text-yellow-600"
+                  ? "border border-chart-5/20 bg-chart-5/10 text-chart-5"
                   : "bg-muted text-muted-foreground"
               )}
             >
@@ -215,10 +215,10 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
                   : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 item.variant === "vip" &&
                   !isActive(item.href) &&
-                  "text-amber-600 hover:bg-amber-50 hover:text-amber-700 dark:text-amber-500 dark:hover:bg-amber-950/30",
+                  "text-chart-5 hover:bg-chart-5/10 hover:text-chart-5 dark:text-chart-5 dark:hover:bg-chart-5/20",
                 item.variant === "admin" &&
                   !isActive(item.href) &&
-                  "text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:text-blue-500 dark:hover:bg-blue-950/30"
+                  "text-primary hover:bg-primary/10 hover:text-primary dark:text-primary dark:hover:bg-primary/20"
               )}
             >
               <item.icon
@@ -226,9 +226,9 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
                   "h-5 w-5 transition-transform duration-300 group-hover:scale-110",
                   isActive(item.href)
                     ? "text-primary"
-                    : "text-muted-foreground/70",
-                  item.variant === "vip" && "text-amber-500",
-                  item.variant === "admin" && "text-blue-500"
+                    : "text-muted-foreground",
+                  item.variant === "vip" && "text-chart-5",
+                  item.variant === "admin" && "text-primary"
                 )}
               />
               <span className="relative z-10">{item.title}</span>
@@ -250,7 +250,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
           <CollapsibleTrigger asChild>
             <button className="text-muted-foreground hover:bg-accent hover:text-foreground group flex w-full items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200">
               <div className="flex items-center gap-3">
-                <Heart className="text-muted-foreground/70 h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:text-red-500" />
+                <Heart className="text-muted-foreground/70 h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:text-destructive" />
                 <span>لیست‌های من</span>
               </div>
               <ChevronDown

@@ -7,17 +7,17 @@ export function CarouselSkeleton() {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <Skeleton className="h-6 w-1 rounded-2xl bg-primary/20" />
-          <Skeleton className="h-6 w-32 bg-gray-900/20" />
+          <Skeleton className="h-6 w-32 bg-muted/20" />
         </div>
 
-        <Skeleton className="hidden h-px flex-1 border-t border-dashed border-gray-900/20 sm:block" />
+        <Skeleton className="hidden h-px flex-1 border-t border-dashed border-muted/20 sm:block" />
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">
-            <Skeleton className="h-8 w-8 rounded-full bg-gray-900/20" />
-            <Skeleton className="h-8 w-8 rounded-full bg-gray-900/20" />
+            <Skeleton className="h-8 w-8 rounded-full bg-muted/20" />
+            <Skeleton className="h-8 w-8 rounded-full bg-muted/20" />
           </div>
-          <Skeleton className="h-8 w-24 rounded-2xl bg-gray-900/20" />
+          <Skeleton className="h-8 w-24 rounded-2xl bg-muted/20" />
         </div>
       </div>
 
@@ -28,7 +28,7 @@ export function CarouselSkeleton() {
             key={i}
             className="aspect-2/3 w-[160px] shrink-0 overflow-hidden rounded-2xl md:w-[200px]"
           >
-            <Skeleton className="h-full w-full bg-gray-900/20" />
+            <Skeleton className="h-full w-full bg-muted/20" />
           </div>
         ))}
       </div>

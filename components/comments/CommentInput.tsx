@@ -105,7 +105,7 @@ export const CommentInput = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 hover:bg-rose-500/10 hover:text-rose-500"
+                className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
                 onClick={onCancelReply}
               >
                 <X className="h-4 w-4" />
@@ -117,12 +117,12 @@ export const CommentInput = ({
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="bg-background ring-border/50 placeholder:text-muted-foreground/50 focus:ring-primary/50 min-h-[100px] w-full resize-y rounded-2xl border-none p-3 text-sm shadow-sm ring-1 outline-hidden transition-all focus:ring-2 md:min-h-[120px] md:p-4"
+              className="bg-background ring-border/50 placeholder:text-muted-foreground focus:ring-primary/50 min-h-[100px] w-full resize-y rounded-2xl border-none p-3 text-sm shadow-sm ring-1 outline-hidden transition-all focus:ring-2 md:min-h-[120px] md:p-4"
               placeholder={replyingTo ? "پاسخ خود را بنویسید..." : "دیدگاه خود را بنویسید..."}
               disabled={isPending}
             />
             <div className="absolute right-3 bottom-3">
-              <MessageSquare className="text-muted-foreground/20 h-4 w-4" />
+              <MessageSquare className="text-muted-foreground/40 h-4 w-4" />
             </div>
           </div>
 
@@ -139,7 +139,7 @@ export const CommentInput = ({
                 id="spoiler-mode"
                 checked={isSpoiler}
                 onCheckedChange={setIsSpoiler}
-                className="data-[state=checked]:bg-rose-500 scale-90 md:scale-100"
+                className="data-[state=checked]:bg-destructive scale-90 md:scale-100"
                 disabled={isPending}
               />
             </div>

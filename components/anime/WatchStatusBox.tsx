@@ -47,19 +47,26 @@ export function WatchStatusBox({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <div className="flex gap-4 h-full flex-1 flex-col rounded-xl border border-primary/10 dark:border-white/10 bg-primary/10 dark:bg-white/5 p-6 backdrop-blur-sm transition-all hover:dark:border-white/20 hover:dark:bg-white/10 hover:border-primary/20 hover:bg-primary/20">
-        <div className="flex flex-1 flex-col items-center justify-center gap-2">
+      <div className="border-primary/20 dark:border-primary/30 bg-primary/10 dark:bg-primary/10 hover:dark:border-primary/40 hover:dark:bg-primary/15 hover:border-primary/30 hover:bg-primary/15 flex h-full min-h-[150px] w-full sm:flex-1 flex-col gap-4 rounded-xl border p-6 backdrop-blur-sm transition-all">
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 min-h-[60px]">
           {currentStatus ? (
-            <span className="text-base font-semibold text-yellow-500">
+            <span className="text-chart-5 text-base font-semibold">
               {watchStatusLabels[currentStatus] || currentStatus}
             </span>
           ) : (
-            <span className="text-base text-muted-foreground">وضعیتی ثبت نشده</span>
+            <span className="text-muted-foreground text-base">
+              وضعیتی ثبت نشده
+            </span>
           )}
-          <span className="text-xs font-medium text-muted-foreground">وضعیت</span>
+          <span className="text-muted-foreground text-xs font-medium">
+            وضعیت
+          </span>
         </div>
         <DialogTrigger asChild>
-          <Button variant="outline" className="w-full">
+          <Button
+            variant="outline"
+            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-secondary/80 dark:text-secondary-foreground hover:dark:bg-secondary/60 w-full"
+          >
             تغییر
           </Button>
         </DialogTrigger>
@@ -67,9 +74,7 @@ export function WatchStatusBox({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>تغییر وضعیت تماشا</DialogTitle>
-          <DialogDescription>
-            وضعیت تماشای خود را انتخاب کنید
-          </DialogDescription>
+          <DialogDescription>وضعیت تماشای خود را انتخاب کنید</DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <Select value={status} onValueChange={setStatus}>
@@ -96,4 +101,3 @@ export function WatchStatusBox({
     </Dialog>
   );
 }
-

@@ -41,7 +41,7 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
       value: (
         <div className="flex items-center gap-1.5">
           {/* Placeholder for network logo logic */}
-          <span className="text-base font-bold text-[#E50914]">
+          <span className="text-base font-bold text-destructive">
             N
           </span>
           <span>{"نت فلیکس"}</span>
