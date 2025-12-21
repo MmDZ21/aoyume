@@ -39,17 +39,17 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
           className="object-cover"
           priority
         />
-        <div className="bg-primary/80 dark:bg-background/80 absolute inset-0 rounded-2xl" />
+        <div className="bg-gradient-to-br from-black/75 via-black/70 to-black/75 dark:from-background/90 dark:via-background/85 dark:to-background/90 absolute inset-0 rounded-2xl" />
       </div>
 
       <div className="relative z-10 container mx-auto flex h-full flex-col justify-center px-4">
         {/* Header */}
         <div className="mb-8 flex gap-4 items-center justify-between">
-          <div className="flex items-center gap-2 text-2xl font-bold text-foreground">
+          <div className="flex items-center gap-2 text-2xl font-bold text-white">
             <PlayCircle className="text-primary size-8" />
             <span>منتخب هفته</span>
           </div>
-          <div className="border-foreground/80 hidden h-px flex-1 border-t border-dashed sm:block" />
+          <div className="border-white/30 hidden h-px flex-1 border-t border-dashed sm:block" />
         </div>
 
         {/* Main Content Grid */}
@@ -66,21 +66,21 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
             </div>
             <Button
               size="icon"
-              className="absolute right-4 bottom-4 rounded-xl border border-foreground/20 bg-foreground/20 text-foreground backdrop-blur-md transition-colors hover:bg-foreground/40"
+              className="absolute right-4 bottom-4 rounded-xl border border-white/30 bg-white/20 text-white backdrop-blur-md transition-colors hover:bg-white/30"
             >
               <Plus className="size-6" />
             </Button>
           </div>
 
           {/* 2. Description (Center) */}
-          <div className="flex flex-1 flex-col text-right text-foreground">
+          <div className="flex flex-1 flex-col text-right text-white">
             <h2
               className="mb-2 text-center text-3xl font-bold md:text-right"
               dir="ltr"
             >
               {anime.dic_title || "Unknown"}
             </h2>
-            <p className="mb-8 text-justify leading-loose text-foreground md:pl-12 line-clamp-4">
+            <p className="mb-8 text-justify leading-loose text-white/90 md:pl-12 line-clamp-4">
               {description}
             </p>
             <div className="flex justify-center md:justify-start">
@@ -99,33 +99,33 @@ const AnimeBigCard = ({ anime }: AnimeBigCardProps) => {
                 {genres.slice(0, 6).map((genre) => (
                   <span
                     key={genre}
-                    className={cn(buttonVariants({ variant: "outline" }))}
+                    className={cn(buttonVariants({ variant: "outline" }), "border-white/30 text-white bg-white/10 hover:bg-white/20 hover:text-white")}
                   >
                     {genre}
                   </span>
                 ))}
               </div>
 
-              <div className="grid w-full max-w-md grid-cols-1 gap-y-8 text-sm">
+              <div className="grid w-full max-w-md grid-cols-1 gap-y-8 text-sm text-white">
                 <div className="flex items-center justify-between gap-4">
-                  <span>امتیاز AoYume :</span>
-                  <span className="font-medium">
+                  <span className="text-white/80">امتیاز AoYume :</span>
+                  <span className="font-medium text-white">
                     <span className="font-bold text-chart-5">{score}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span>امتیاز MyAnimeList :</span>
-                  <span className="font-medium">
+                  <span className="text-white/80">امتیاز MyAnimeList :</span>
+                  <span className="font-medium text-white">
                     <span className="font-bold text-chart-5">{malScore}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span> زمان پخش :</span>
-                  <span>{broadcastTime}</span>
+                  <span className="text-white/80"> زمان پخش :</span>
+                  <span className="text-white">{broadcastTime}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span>قسمت ها :</span>
-                  <span>{episodes} قسمت</span>
+                  <span className="text-white/80">قسمت ها :</span>
+                  <span className="text-white">{episodes} قسمت</span>
                 </div>
               </div>
             </div>

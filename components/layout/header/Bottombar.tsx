@@ -26,27 +26,29 @@ const Bottombar = () => {
               )}
               {item.items && (
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {item.items.map((subItem) => (
-                      <li key={subItem.label}>
-                        <NavigationMenuLink asChild>
-                          <a
-                            href={subItem.href}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">
-                              {subItem.label}
-                            </div>
-                            {subItem.description && (
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                {subItem.description}
-                              </p>
-                            )}
-                          </a>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="w-[400px] p-5 md:w-[500px] lg:w-[600px]">
+                    <ul className="grid gap-2.5 md:grid-cols-2 lg:grid-cols-3">
+                      {item.items.map((subItem) => (
+                        <li key={subItem.label} className="[&>a]:text-foreground [&>a:hover]:text-primary">
+                          <NavigationMenuLink asChild>
+                            <a
+                              href={subItem.href}
+                              className="block select-none rounded-xl p-3.5 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 focus:bg-primary/10 hover:shadow-lg hover:scale-[1.02] border border-border/50 hover:border-primary/40 bg-card/50 backdrop-blur-sm text-center hover:bg-primary/15"
+                            >
+                              <div className="text-sm transition-colors font-medium">
+                                {subItem.label}
+                              </div>
+                              {subItem.description && (
+                                <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                                  {subItem.description}
+                                </p>
+                              )}
+                            </a>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </NavigationMenuContent>
               )}
             </NavigationMenuItem>
