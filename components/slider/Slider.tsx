@@ -62,12 +62,12 @@ const Slider = ({ slides }: SliderProps) => {
               />
               {/* Gradient Overlay */}
               <div className="absolute inset-0 z-10 rounded-2xl">
-                <div className="absolute inset-0 rounded-2xl bg-linear-to-t from-black to-transparent md:bg-linear-to-l dark:from-background"></div>
+                <div className="absolute inset-0 rounded-2xl bg-linear-to-t from-black/60 to-transparent md:bg-linear-to-l dark:from-background"></div>
               </div>
             </div>
 
             {/* Content */}
-            <div className="relative z-30 flex h-full flex-col justify-end px-4 pb-12 text-center md:w-1/2 md:items-start md:justify-center md:px-16 md:pb-0 md:text-right">
+            <div className="absolute inset-x-0 bottom-24 z-30 flex flex-col px-4 text-center md:bottom-auto md:top-[60px] md:w-1/2 md:items-start md:px-16 md:text-right">
               <div className="flex w-full max-w-[600px] flex-col items-center justify-center gap-2 md:items-start">
                 <h2
                   dir="ltr"
@@ -86,38 +86,42 @@ const Slider = ({ slides }: SliderProps) => {
                   </p>
                 </div>
               </div>
-              <div className="flex w-full items-center gap-3 md:w-auto md:gap-4">
-                {/* Watch Button - Full width on mobile */}
-                <Button
-                  size="default"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 flex-1 gap-2 text-sm md:h-10 md:flex-none md:px-8 md:text-base"
-                >
-                  <Play className="fill-current" size={20} />
-                  <span>مشاهده انیمه</span>
-                </Button>
-                {/* Bookmark Button - Icon only on mobile */}
-                <Button variant="outline" className="h-12 md:h-10 bg-white/20 text-white border-white/30 hover:bg-white/30 hover:text-white backdrop-blur-sm dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/20">
-                  <Bookmark size={20} />
-                  <span className="hidden md:mr-2 md:inline">
-                    افزودن به لیست تماشا
-                  </span>
-                </Button>
-              </div>
             </div>
           </SwiperSlide>
         ))}
 
-        {/* Navigation Buttons - Hidden on mobile, bottom left on desktop */}
-        <div
-          className="absolute bottom-8 left-8 z-20 hidden gap-3 md:flex"
-          dir="ltr"
-        >
-          <button className="image-swiper-button-next bg-primary/50 hover:bg-primary/70 flex size-12 items-center justify-center rounded-xl text-primary-foreground backdrop-blur-sm transition-colors disabled:opacity-50">
-            <ChevronLeft className="size-7" />
-          </button>
-          <button className="image-swiper-button-prev bg-primary/50 hover:bg-primary/70 flex size-12 items-center justify-center rounded-xl text-primary-foreground backdrop-blur-sm transition-colors disabled:opacity-50">
-            <ChevronRight className="size-7" />
-          </button>
+        {/* Bottom Controls */}
+        <div className="absolute bottom-8 left-0 right-0 z-20 flex items-center justify-between gap-4 px-4 md:px-16">
+          <div className="flex w-full max-w-md items-center gap-3 md:w-auto md:gap-4">
+            {/* Watch Button - Full width on mobile */}
+            <Button
+              size="default"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 flex-1 gap-2 text-sm md:h-10 md:flex-none md:px-8 md:text-base"
+            >
+              <Play className="fill-current" size={20} />
+              <span>مشاهده انیمه</span>
+            </Button>
+            {/* Bookmark Button - Icon only on mobile */}
+            <Button variant="outline" className="h-12 md:h-10 bg-white/20 text-white border-white/30 hover:bg-white/30 hover:text-white backdrop-blur-sm dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/20">
+              <Bookmark size={20} />
+              <span className="hidden md:mr-2 md:inline">
+                افزودن به لیست تماشا
+              </span>
+            </Button>
+          </div>
+
+          {/* Navigation Buttons - Hidden on mobile, bottom left on desktop */}
+          <div
+            className="hidden gap-3 md:flex"
+            dir="ltr"
+          >
+            <button className="image-swiper-button-next bg-primary/50 hover:bg-primary/70 flex size-12 items-center justify-center rounded-xl text-primary-foreground backdrop-blur-sm transition-colors disabled:opacity-50">
+              <ChevronLeft className="size-7" />
+            </button>
+            <button className="image-swiper-button-prev bg-primary/50 hover:bg-primary/70 flex size-12 items-center justify-center rounded-xl text-primary-foreground backdrop-blur-sm transition-colors disabled:opacity-50">
+              <ChevronRight className="size-7" />
+            </button>
+          </div>
         </div>
       </Swiper>
     </section>
