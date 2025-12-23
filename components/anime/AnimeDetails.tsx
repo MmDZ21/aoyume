@@ -23,6 +23,7 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
         .filter((g) => g.name_fa && g.name_en)
         .map((g) => ({ name: g.name_fa!, slug: g.name_en! }))
     : (anime.genre_names_en || []).map((g) => ({ name: g, slug: g }));
+  const malLink = anime.mal_id ? `https://myanimelist.net/anime/${anime.mal_id}` : null;
   const latestUpdate = anime.last_update || "نامشخص";
   const score = anime.dic_rating || 0;
   const malScore = anime.dic_score ? parseFloat(anime.dic_score) : 0;
@@ -74,6 +75,21 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                   {/* Overlay icons if needed */}
                 </div>
               </div>
+              {malLink && (
+                <div className="mt-4 flex justify-center">
+                  <Link
+                    href={malLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      buttonVariants({ variant: "default" }),
+                      "w-full text-center text-sm"
+                    )}
+                  >
+                    مشاهده در MyAnimeList
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Info Section */}
