@@ -58,6 +58,21 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
           <div className="order-2 flex shrink-0 flex-col items-center sm:items-stretch sm:flex-row gap-4 lg:order-2 lg:w-64 lg:flex-col">
             <RatingBox currentRating={8} />
             <WatchStatusBox currentStatus={"watching"} />
+            {malLink && (
+              <div className="flex w-full justify-center sm:hidden">
+                <Link
+                  href={malLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "w-full text-center text-sm"
+                  )}
+                >
+                  مشاهده در MyAnimeList
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Poster and Info Section Grouped Together */}
@@ -76,7 +91,7 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                 </div>
               </div>
               {malLink && (
-                <div className="mt-4 flex justify-center">
+                <div className="mt-4 hidden sm:flex justify-center">
                   <Link
                     href={malLink}
                     target="_blank"

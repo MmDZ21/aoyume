@@ -25,31 +25,31 @@ export const bottombarNavItems: BottombarNavItem[] = [
     items: [
       {
         label: "کمدی",
-        href: "/anime/comedy",
+        href: "/anime/genre/comedy",
       },
       {
         label: "درام",
-        href: "/anime/drama",
+        href: "/anime/genre/drama",
       },
       {
         label: "اکشن",
-        href: "/anime/action",
+        href: "/anime/genre/action",
       },
       {
         label: "ماجراجویی",
-        href: "/anime/adventure",
+        href: "/anime/genre/adventure",
       },
       {
         label: "جنایی",
-        href: "/anime/crime",
+        href: "/anime/genre/crime",
       },
       {
         label: "عاشقانه",
-        href: "/anime/romance",
+        href: "/anime/genre/romance",
       },
       {
         label: "فانتزی",
-        href: "/anime/fantasy",
+        href: "/anime/genre/fantasy",
       },
       {
         label: "مشاهده همه",
@@ -62,31 +62,31 @@ export const bottombarNavItems: BottombarNavItem[] = [
     items: [
       {
         label: "2025",
-        href: "/anime/2025",
+        href: "/anime/year/2025",
       },
       {
         label: "2024",
-        href: "/anime/2024",
+        href: "/anime/year/2024",
       },
       {
         label: "2023",
-        href: "/anime/2023",
+        href: "/anime/year/2023",
       },
       {
         label: "2022",
-        href: "/anime/2022",
+        href: "/anime/year/2022",
       },
       {
         label: "2021",
-        href: "/anime/2021",
+        href: "/anime/year/2021",
       },
       {
         label: "2020",
-        href: "/anime/2020",
+        href: "/anime/year/2020",
       },
       {
         label: "2019",
-        href: "/anime/2019",
+        href: "/anime/year/2019",
       },
       {
         label: "مشاهده همه",
