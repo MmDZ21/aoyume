@@ -74,7 +74,7 @@
   /* System */
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.91 0.01 248);
-  --input: oklch(0.91 0.01 248);
+  --input: oklch(0.80 0.02 248);
   --ring: oklch(0.62 0.18 255);
 
   /* Charts (anime-friendly) */

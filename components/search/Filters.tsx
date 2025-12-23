@@ -11,6 +11,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { Check, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface FilterProps {
   genres: { english_name: string; persian_name: string }[];
@@ -21,16 +37,21 @@ export function Filters({ genres }: FilterProps) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const [genre, setGenre] = useState(searchParams.get("genre") || "all");
+  const initialGenre = searchParams.get("genre");
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    initialGenre && initialGenre !== "all" ? initialGenre.split(",") : []
+  );
+  
   const [season, setSeason] = useState(searchParams.get("season") || "all");
   const [year, setYear] = useState(searchParams.get("year") || "");
   const [status, setStatus] = useState(searchParams.get("status") || "all");
   const [sort, setSort] = useState(searchParams.get("sort") || "newest");
+  const [openGenre, setOpenGenre] = useState(false);
 
   const handleApply = () => {
     startTransition(() => {
       const params = new URLSearchParams();
-      if (genre && genre !== "all") params.set("genre", genre);
+      if (selectedGenres.length > 0) params.set("genre", selectedGenres.join(","));
       if (season && season !== "all") params.set("season", season);
       if (year) params.set("year", year);
       if (status && status !== "all") params.set("status", status);
@@ -41,7 +62,7 @@ export function Filters({ genres }: FilterProps) {
   };
 
   const handleClear = () => {
-    setGenre("all");
+    setSelectedGenres([]);
     setSeason("all");
     setYear("");
     setStatus("all");
@@ -51,27 +72,79 @@ export function Filters({ genres }: FilterProps) {
     });
   };
 
+  const toggleGenre = (value: string) => {
+    setSelectedGenres((current) =>
+      current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value]
+    );
+  };
+
   return (
     <div className="bg-background/80 backdrop-blur-xl p-6 rounded-3xl border border-border shadow-2xl">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {/* Genre */}
-        <Select value={genre} onValueChange={setGenre}>
-          <SelectTrigger className="w-full h-12! bg-secondary/30 border-transparent focus:ring-primary/50 rounded-xl">
-            <SelectValue placeholder="ژانرها" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">همه ژانرها</SelectItem>
-            {genres.map((g) => (
-              <SelectItem key={g.english_name} value={g.english_name}>
-                {g.persian_name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Genre Multi-Select */}
+        <Popover open={openGenre} onOpenChange={setOpenGenre}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={openGenre}
+              className="w-full h-12 justify-between bg-card border-input focus:ring-primary/50 rounded-xl shadow-sm text-foreground font-normal hover:bg-card"
+            >
+              {selectedGenres.length > 0
+                ? `${selectedGenres.length} انتخاب شده`
+                : "ژانرها"}
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0" align="start">
+            <Command>
+              <CommandInput placeholder="جستجوی ژانر..." />
+              <CommandList>
+                <CommandEmpty>ژانری یافت نشد.</CommandEmpty>
+                <CommandGroup>
+                  {genres.map((g) => (
+                    <CommandItem
+                      key={g.english_name}
+                      value={g.persian_name} // Search by persian name
+                      onSelect={() => toggleGenre(g.english_name)}
+                    >
+                      <div
+                        className={cn(
+                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          selectedGenres.includes(g.english_name)
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible"
+                        )}
+                      >
+                        <Check className={cn("h-4 w-4")} />
+                      </div>
+                      <span>{g.persian_name}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+                {selectedGenres.length > 0 && (
+                  <>
+                    <CommandSeparator />
+                    <CommandGroup>
+                      <CommandItem
+                        onSelect={() => setSelectedGenres([])}
+                        className="justify-center text-center"
+                      >
+                        پاک کردن همه
+                      </CommandItem>
+                    </CommandGroup>
+                  </>
+                )}
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
 
         {/* Season */}
         <Select value={season} onValueChange={setSeason}>
-            <SelectTrigger className="w-full h-12! bg-secondary/30 border-transparent focus:ring-primary/50 rounded-xl">
+            <SelectTrigger className="w-full h-12! bg-card border-input focus:ring-primary/50 rounded-xl shadow-sm">
                 <SelectValue placeholder="فصل انتشار" />
             </SelectTrigger>
             <SelectContent>
@@ -89,12 +162,12 @@ export function Filters({ genres }: FilterProps) {
             placeholder="سال انتشار" 
             value={year} 
             onChange={(e) => setYear(e.target.value)}
-            className="w-full h-12 bg-secondary/30 border-transparent focus-visible:ring-primary/50 rounded-xl"
+            className="w-full h-12 bg-card border-input focus-visible:ring-primary/50 rounded-xl shadow-sm"
         />
 
         {/* Status */}
          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="w-full h-12! bg-secondary/30 border-transparent focus:ring-primary/50 rounded-xl">
+            <SelectTrigger className="w-full h-12! bg-card border-input focus:ring-primary/50 rounded-xl shadow-sm">
                 <SelectValue placeholder="وضعیت پخش" />
             </SelectTrigger>
             <SelectContent>
@@ -107,7 +180,7 @@ export function Filters({ genres }: FilterProps) {
 
         {/* Sort */}
          <Select value={sort} onValueChange={setSort}>
-            <SelectTrigger className="w-full h-12! bg-secondary/30 border-transparent focus:ring-primary/50 rounded-xl">
+            <SelectTrigger className="w-full h-12! bg-card border-input focus:ring-primary/50 rounded-xl shadow-sm">
                 <SelectValue placeholder="مرتب سازی" />
             </SelectTrigger>
             <SelectContent>
@@ -139,4 +212,3 @@ export function Filters({ genres }: FilterProps) {
     </div>
   );
 }
-

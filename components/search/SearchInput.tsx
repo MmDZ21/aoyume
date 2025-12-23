@@ -56,7 +56,7 @@ export function SearchInput() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="جستجو در انیمه ها..."
-          className="pr-10 h-12 text-lg rounded-xl bg-background/50 backdrop-blur-sm border-white/10 focus-visible:ring-primary/50 transition-all"
+          className="pr-10 h-12 text-lg rounded-xl bg-card border-input focus-visible:ring-primary/50 transition-all shadow-sm"
         />
         {isPending && (
             <div className="absolute left-3 top-1/2 -translate-y-1/2">

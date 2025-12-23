@@ -23,7 +23,7 @@ interface BrowsePageProps {
 
 export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   const params = await searchParams;
-  const genre = params.genre || "all";
+  const genreParam = params.genre || "all";
   const season = params.season || "all";
   const year = params.year ? parseInt(params.year) : null;
   const status = params.status || "all";
@@ -43,8 +43,9 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     .select("*", { count: "exact" })
     .eq("post_status", 1);
 
-  if (genre !== "all") {
-    queryBuilder = queryBuilder.contains("genre_names_en", [genre]);
+  if (genreParam !== "all") {
+    const selectedGenres = genreParam.split(",");
+    queryBuilder = queryBuilder.contains("genre_names_en", selectedGenres);
   }
 
   if (season !== "all") {

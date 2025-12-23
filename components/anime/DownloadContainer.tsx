@@ -20,7 +20,30 @@ export function DownloadContainer({
   hasAccess = false, // Default to false if not provided
 }: DownloadContainerProps) {
   // Extract qualities from episodes if provided
-  const availableQualities = useMemo(() => episodes?.map((group) => group.quality) || [], [episodes]);
+  const availableQualities = useMemo(() => {
+    if (!episodes) return [];
+    
+    // Sort qualities: 1080 first, then 720, then 480, then others
+    // We can parse the number part to sort properly (e.g. "1080p x265" vs "1080p")
+    return episodes.map((group) => group.quality).sort((a, b) => {
+       const getPriority = (q: string) => {
+         const lower = q.toLowerCase();
+         if (lower.includes("1080")) return 3;
+         if (lower.includes("720")) return 2;
+         if (lower.includes("480")) return 1;
+         return 0;
+       };
+       
+       const priorityA = getPriority(a);
+       const priorityB = getPriority(b);
+       
+       if (priorityA !== priorityB) {
+         return priorityA - priorityB; // Lower priority first (reversed)
+       }
+       
+       return b.localeCompare(a); // Reverse alphabetical fallback
+    });
+  }, [episodes]);
   
   const [selectedQuality, setSelectedQuality] = useState<string>(
     availableQualities.length > 0 ? availableQualities[availableQualities.length - 1] : "1080"

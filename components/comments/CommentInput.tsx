@@ -117,7 +117,7 @@ export const CommentInput = ({
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="bg-background ring-border/50 placeholder:text-muted-foreground focus:ring-primary/50 min-h-[100px] w-full resize-y rounded-2xl border-none p-3 text-sm shadow-sm ring-1 outline-hidden transition-all focus:ring-2 md:min-h-[120px] md:p-4"
+              className="bg-background ring-input placeholder:text-muted-foreground focus:ring-primary/50 min-h-[100px] w-full resize-y rounded-2xl border-none p-3 text-sm shadow-sm ring-1 outline-hidden transition-all focus:ring-2 md:min-h-[120px] md:p-4"
               placeholder={replyingTo ? "پاسخ خود را بنویسید..." : "دیدگاه خود را بنویسید..."}
               disabled={isPending}
             />
@@ -127,7 +127,7 @@ export const CommentInput = ({
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="bg-background ring-border/50 flex items-center justify-between gap-3 rounded-xl px-3 py-2 shadow-sm ring-1 md:rounded-2xl md:px-4">
+            <div className="bg-background ring-input flex items-center justify-between gap-3 rounded-xl px-3 py-2 shadow-sm ring-1 md:rounded-2xl md:px-4">
               <SimpleLabel
                 htmlFor="spoiler-mode"
                 className="text-muted-foreground text-xs"
