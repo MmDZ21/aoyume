@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn, translateSeason } from "@/lib/utils";
 import { Database } from "@/types/database.types";
 
 type AnimeDetailsRow = Database["public"]["Views"]["complete_anime_details_materialized"]["Row"];
@@ -20,9 +20,18 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
         .map((g) => g.name_fa)
         .filter((g): g is string => !!g)
     : anime.genre_names_en || [];
-  const status = anime.dic_status === 1 ? "Airing" : "Finished";
-  const episodes = anime.episodes_en || anime.episodes_fa || "0";
-  const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "Unknown";
+  let status = "نامشخص";
+  if (anime.dic_status === 1) status = "در حال پخش";
+  else if (anime.dic_status === 2) status = "پایان یافته";
+  else if (anime.dic_status === 3) status = "بزودی";
+  
+  const episodesRaw = anime.episodes_en || anime.episodes_fa;
+  const episodes = episodesRaw && episodesRaw !== "0" && episodesRaw !== "?" && episodesRaw.toLowerCase() !== "unknown" ? `${episodesRaw} قسمت` : "نامشخص";
+  
+  const season = translateSeason(anime.season);
+  const seasonYear = anime.seasonYear;
+  const broadcastTime = season ? `${season} ${seasonYear}` : "نامشخص";
+
   const latestUpdate = anime.last_update || "Unknown";
   const score = anime.dic_rating || 0;
   const voters = 0; // Not available in view
@@ -30,6 +39,7 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
   const malVoters = anime.dic_scored_by?.replace(/,/g, "") || "0";
   const downloadedCount = 0; // Not available in view
   const watchedCount = anime.post_hit || 0;
+  const country = anime.countryOfOrigin || "Japan"; // Default to Japan if not present, though most animes are from Japan
   
   const items: DetailItem[] = [
     {
@@ -37,16 +47,8 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
       value: "13+ سال", // Placeholder
     },
     {
-      label: "شبکه پخش",
-      value: (
-        <div className="flex items-center gap-1.5">
-          {/* Placeholder for network logo logic */}
-          <span className="text-base font-bold text-destructive">
-            N
-          </span>
-          <span>{"نت فلیکس"}</span>
-        </div>
-      ),
+      label: "کشور سازنده",
+      value: country,
     },
     {
       label: "ژانر",
@@ -59,7 +61,7 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
     },
     {
       label: "تعداد قسمت‌ها",
-      value: `${episodes} قسمت`,
+      value: episodes,
     },
     {
       label: "زمان پخش",
@@ -133,7 +135,7 @@ export function AnimeDetailsTable({ anime }: AnimeDetailsTableProps) {
               <div className={cn(
                 "line-clamp-2 text-sm font-semibold leading-relaxed",
                 isScore && "text-chart-5",
-                isStatus && status === "Airing" ? "text-chart-4" : "text-foreground",
+                isStatus && status === "در حال پخش" ? "text-chart-4" : "text-foreground",
                 !isScore && !isStatus && "text-foreground"
               )}>
                 {item.value}

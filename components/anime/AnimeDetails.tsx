@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, translateSeason } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
 import { RatingBox } from "./RatingBox";
 import { WatchStatusBox } from "./WatchStatusBox";
@@ -27,8 +27,10 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
   const latestUpdate = anime.last_update || "نامشخص";
   const score = anime.dic_rating || 0;
   const malScore = anime.dic_score ? parseFloat(anime.dic_score) : 0;
-  const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "Unknown";
-  const episodes = anime.episodes_en || anime.episodes_fa || "0";
+  const season = translateSeason(anime.season);
+  const seasonYear = anime.seasonYear;
+  const episodesRaw = anime.episodes_en || anime.episodes_fa;
+  const episodes = episodesRaw && episodesRaw !== "0" && episodesRaw !== "?" && episodesRaw.toLowerCase() !== "unknown" ? `${episodesRaw} قسمت` : "نامشخص";
   const synopsis = anime.summary_fa || anime.summary_en || "No synopsis available.";
   return (
     <div
@@ -122,10 +124,12 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                 )}
               </div>
 
-              <div className={cn(buttonVariants({ variant: "default" }), "justify-center text-center sm:justify-center sm:text-left")}>
-                <span className="text-primary-foreground/90">آخرین بروزرسانی: </span>
-                <span className="text-primary-foreground">{latestUpdate}</span>
-              </div>
+              {anime.dic_status !== 0 && (
+                <div className={cn(buttonVariants({ variant: "default" }), "justify-center text-center sm:justify-center sm:text-left")}>
+                  <span className="text-primary-foreground/90">آخرین بروزرسانی: </span>
+                  <span className="text-primary-foreground">{latestUpdate}</span>
+                </div>
+              )}
 
               <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
                 {genres.map((genre) => (
@@ -154,11 +158,13 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span> زمان پخش :</span>
-                  <span>{broadcastTime}</span>
+                  <span>
+                    {season && ` ${season} ${seasonYear}`}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <span>قسمت ها :</span>
-                  <span>{episodes} قسمت</span>
+                  <span>{episodes}</span>
                 </div>
               </div>
             </div>

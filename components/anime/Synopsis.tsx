@@ -1,8 +1,10 @@
 "use client";
 
+import React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import parse from "html-react-parser";
 
 interface SynopsisProps {
   text: string;
@@ -20,9 +22,9 @@ export function Synopsis({ text, maxLength = 300 }: SynopsisProps) {
   return (
     <div className="mt-4 border-t border-white/10 pt-6 text-right">
       <h3 className="mb-2 text-lg font-semibold">خلاصه انیمه :</h3>
-      <p className="text-sm leading-relaxed md:text-sm">
-        {displayText}
-      </p>
+      <div className="text-sm leading-relaxed md:text-sm">
+        {parse(displayText)}
+      </div>
       {shouldTruncate && (
         <Button
           variant="ghost"

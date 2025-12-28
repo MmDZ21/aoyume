@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { slugify } from "@/lib/utils";
+import parse from "html-react-parser";
 
 export interface MediaItem {
   id: number;
@@ -90,9 +91,9 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
             </div>
           </div>
 
-          <p className="line-clamp-4 text-sm leading-relaxed text-muted-foreground">
-            {item.description}
-          </p>
+          <div className="line-clamp-4 text-sm leading-relaxed text-muted-foreground">
+            {parse(item.description)}
+          </div>
 
           <div className="flex gap-2 pt-2">
             <Button className="bg-primary hover:bg-primary/90 h-9 flex-1 rounded-xl text-xs md:text-sm">

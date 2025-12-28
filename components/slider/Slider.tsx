@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination, EffectFade } from "swiper/modules";
 import { Button } from "@/components/ui/button";
 import { Play, Bookmark, ChevronRight, ChevronLeft } from "lucide-react";
+import parse from "html-react-parser";
 
 // Import Swiper styles
 import "swiper/css";
@@ -81,9 +82,9 @@ const Slider = ({ slides }: SliderProps) => {
                 </p>
                 {/* Desktop Description */}
                 <div className="hidden md:block">
-                  <p className="text-primary-foreground dark:text-foreground mb-8 line-clamp-4 text-sm leading-relaxed md:text-sm">
-                    {slide.description}
-                  </p>
+                  <div className="text-primary-foreground dark:text-foreground mb-8 line-clamp-4 text-sm leading-relaxed md:text-sm">
+                    {parse(slide.description)}
+                  </div>
                 </div>
               </div>
             </div>

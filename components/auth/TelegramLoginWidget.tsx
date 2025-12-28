@@ -14,7 +14,7 @@ export function TelegramLoginWidget() {
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.async = true;
-    script.setAttribute("data-telegram-login", "animeapp1_bot");
+    script.setAttribute("data-telegram-login", "animeapp1_bot"); // Replace with your bot username if different
     script.setAttribute("data-size", "large");
     script.setAttribute("data-auth-url", "https://bburkvhaokdtocyrznyv.supabase.co/functions/v1/telegram-web-auth");
     script.setAttribute("data-request-access", "write");

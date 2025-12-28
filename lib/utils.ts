@@ -135,3 +135,44 @@ export function hasRole(
 export function canVerifyComments(sessionOrTokenCarrier: TokenCarrier | null | undefined): boolean {
   return hasRole(sessionOrTokenCarrier, ["admin", "moderator"]);
 }
+
+export function translateSeason(season?: string | null) {
+  if (!season) return null;
+  const map: Record<string, string> = {
+    winter: "زمستان",
+    spring: "بهار",
+    summer: "تابستان",
+    fall: "پاییز",
+  };
+  return map[season.toLowerCase()] || season;
+}
+
+export function translateDay(day?: string | null) {
+  if (!day) return null;
+  // Simple mapping if the string is just the day
+  const map: Record<string, string> = {
+    monday: "دوشنبه",
+    tuesday: "سه شنبه",
+    wednesday: "چهارشنبه",
+    thursday: "پنج شنبه",
+    friday: "جمعه",
+    saturday: "شنبه",
+    sunday: "یکشنبه",
+  };
+  
+  // Check if day matches exactly
+  if (map[day.toLowerCase()]) return map[day.toLowerCase()];
+
+  // Otherwise, try to replace days in a string (e.g. "Mondays at ...")
+  let translated = day;
+  Object.keys(map).forEach((enDay) => {
+    // Regex to match the day name (case insensitive), potentially plural (s)
+    const regex = new RegExp(`\\b${enDay}s?\\b`, "gi");
+    translated = translated.replace(regex, map[enDay]);
+  });
+  
+  // Replace "at" with "ساعت" if present
+  translated = translated.replace(/\bat\b/gi, "ساعت");
+  
+  return translated;
+}
