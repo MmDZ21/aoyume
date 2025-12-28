@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { jwtDecode } from "jwt-decode";
+import { type Session } from "@supabase/supabase-js";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,9 +42,21 @@ function normalizeRole(maybeRole: unknown): UserRole {
  * - Supabase built-in claim `role` is usually "authenticated"/"anon" and NOT your app role.
  * - Your app role is typically in `app_metadata.role` (or sometimes `app_metadata.app_role`).
  */
+interface SupabaseJwtPayload {
+  app_metadata?: {
+    role?: string;
+    app_role?: string;
+  };
+  user_metadata?: {
+    role?: string;
+  };
+  user_role?: string;
+  role?: string;
+}
+
 export function getRoleFromJwt(accessToken: string): UserRole {
   try {
-    const decoded: any = jwtDecode(accessToken);
+    const decoded = jwtDecode<SupabaseJwtPayload>(accessToken);
 
     // Optional debug log (enable with DEBUG_JWT=true / NEXT_PUBLIC_DEBUG_JWT=true)
     const debug =
@@ -75,22 +88,32 @@ export function getRoleFromJwt(accessToken: string): UserRole {
   }
 }
 
-export function getRoleFromSession(session: any): UserRole {
+export function getRoleFromSession(session: Session | null): UserRole {
   const token = session?.access_token;
   if (typeof token !== "string" || token.length === 0) return "free";
   return getRoleFromJwt(token);
 }
 
+// Helper type for objects that might contain a token
+export type TokenCarrier = {
+  access_token?: string;
+  session?: {
+    access_token?: string;
+  } | null;
+  [key: string]: unknown;
+};
+
 /**
  * Backwards-compatible name used across the app.
  * This function **only trusts JWT token data**. If you pass a user without token, it returns "free".
  */
-export function getUserRole(sessionOrTokenCarrier: any): UserRole {
+export function getUserRole(sessionOrTokenCarrier: TokenCarrier | null | undefined): UserRole {
   if (!sessionOrTokenCarrier) return "free";
 
   // Session shape: { access_token: string }
   if (typeof sessionOrTokenCarrier?.access_token === "string") {
-    return getRoleFromSession(sessionOrTokenCarrier);
+    // We check for string type explicitly, so it is safe to pass to getRoleFromJwt
+    return getRoleFromJwt(sessionOrTokenCarrier.access_token);
   }
 
   // Legacy shapes: { session: { access_token } }
@@ -101,11 +124,14 @@ export function getUserRole(sessionOrTokenCarrier: any): UserRole {
   return "free";
 }
 
-export function hasRole(sessionOrTokenCarrier: any, roles: UserRole[]): boolean {
+export function hasRole(
+  sessionOrTokenCarrier: TokenCarrier | null | undefined,
+  roles: UserRole[]
+): boolean {
   const userRole = getUserRole(sessionOrTokenCarrier);
   return roles.includes(userRole);
 }
 
-export function canVerifyComments(sessionOrTokenCarrier: any): boolean {
+export function canVerifyComments(sessionOrTokenCarrier: TokenCarrier | null | undefined): boolean {
   return hasRole(sessionOrTokenCarrier, ["admin", "moderator"]);
 }

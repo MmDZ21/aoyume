@@ -30,7 +30,6 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
   const broadcastTime = anime.broadcast_fa || anime.broadcast_en || "Unknown";
   const episodes = anime.episodes_en || anime.episodes_fa || "0";
   const synopsis = anime.summary_fa || anime.summary_en || "No synopsis available.";
-
   return (
     <div
       className={cn(
@@ -109,7 +108,19 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
 
             {/* Info Section */}
             <div className="flex flex-col gap-6 text-center w-full sm:text-right sm:max-w-sm">
-              <h1 className="text-2xl font-bold sm:text-start md:text-3xl">{title}</h1>
+              <div className="flex flex-col gap-2">
+                <h1 className="text-2xl font-bold sm:text-start md:text-3xl">{title}</h1>
+                {anime.dic_title_en && anime.dic_title_en !== title && (
+                  <h2 className="text-sm text-muted-foreground sm:text-start font-medium opacity-80">
+                    {anime.dic_title_en}
+                  </h2>
+                )}
+                {anime.title_fa && anime.title_fa !== title && (
+                  <h3 className="text-sm text-muted-foreground sm:text-start font-medium opacity-80">
+                    {anime.title_fa}
+                  </h3>
+                )}
+              </div>
 
               <div className={cn(buttonVariants({ variant: "default" }), "justify-center text-center sm:justify-center sm:text-left")}>
                 <span className="text-primary-foreground/90">آخرین بروزرسانی: </span>

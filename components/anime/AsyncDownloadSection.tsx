@@ -8,7 +8,10 @@ interface AsyncDownloadSectionProps {
   hasAccess: boolean;
 }
 
-export async function AsyncDownloadSection({ animeId, hasAccess }: AsyncDownloadSectionProps) {
+export async function AsyncDownloadSection({
+  animeId,
+  hasAccess,
+}: AsyncDownloadSectionProps) {
   const episodes = await getAnimeEpisodes(animeId);
 
   return <DownloadContainer episodes={episodes} hasAccess={hasAccess} />;
@@ -17,16 +20,15 @@ export async function AsyncDownloadSection({ animeId, hasAccess }: AsyncDownload
 export function DownloadSectionSkeleton() {
   return (
     <div className="space-y-6">
-       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <Skeleton className="h-8 w-32 bg-muted/20" />
-          <Skeleton className="h-10 w-full md:w-48 bg-muted/20" />
-       </div>
-       <div className="space-y-4">
-          <Skeleton className="h-16 w-full rounded-xl bg-muted/20" />
-          <Skeleton className="h-16 w-full rounded-xl bg-muted/20" />
-          <Skeleton className="h-16 w-full rounded-xl bg-muted/20" />
-       </div>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <Skeleton className="bg-muted/20 h-8 w-32" />
+        <Skeleton className="bg-muted/20 h-10 w-full md:w-48" />
+      </div>
+      <div className="space-y-4">
+        <Skeleton className="bg-muted/20 h-16 w-full rounded-xl" />
+        <Skeleton className="bg-muted/20 h-16 w-full rounded-xl" />
+        <Skeleton className="bg-muted/20 h-16 w-full rounded-xl" />
+      </div>
     </div>
-  )
+  );
 }
-

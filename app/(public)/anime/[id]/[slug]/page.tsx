@@ -2,7 +2,10 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import { AnimeDetails } from "@/components/anime/AnimeDetails";
 import { ReusableTabs, TabItem } from "@/components/ui/ReusableTabs";
-import { AsyncDownloadSection, DownloadSectionSkeleton } from "@/components/anime/AsyncDownloadSection";
+import {
+  AsyncDownloadSection,
+  DownloadSectionSkeleton,
+} from "@/components/anime/AsyncDownloadSection";
 import { AnimeDetailsTable } from "@/components/anime/AnimeDetailsTable";
 import { MediaItem } from "@/components/carousel/MediaCard";
 import { MediaGrid } from "@/components/carousel/MediaGrid";
@@ -14,9 +17,15 @@ import { mapJsonToMediaItem, RelatedAnimeJson } from "@/lib/mappers";
 import { getAnimeDetails } from "@/lib/data";
 
 // Reusable tab content wrapper
-const TabContent = ({ title, children }: { title: string; children: React.ReactNode }) => (
+const TabContent = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => (
   <div className="space-y-6">
-    <h3 className="text-center text-xl font-bold text-primary dark:text-foreground md:text-start">
+    <h3 className="text-primary dark:text-foreground text-center text-xl font-bold md:text-start">
       {title}
     </h3>
     {children}
@@ -28,10 +37,12 @@ type PageProps = {
 };
 
 // 1. Generate Metadata for SEO
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { id } = await params;
   const animeId = parseInt(id, 10);
-  
+
   if (isNaN(animeId)) return { title: "Anime Not Found" };
 
   const anime = await getAnimeDetails(animeId);
@@ -40,7 +51,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${anime.dic_title} | دانلود و تماشای آنلاین`,
-    description: anime.summary_fa?.substring(0, 160) || `دانلود انیمه ${anime.dic_title}`,
+    description:
+      anime.summary_fa?.substring(0, 160) || `دانلود انیمه ${anime.dic_title}`,
     openGraph: {
       title: anime.dic_title || undefined,
       description: anime.summary_fa?.substring(0, 160) || undefined,
@@ -66,7 +78,9 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
   if (!animeData) notFound();
 
   // Validate Slug for SEO (Canonical URL)
-  const expectedSlug = slugify(animeData.dic_title || animeData.title_en_normalized || "");
+  const expectedSlug = slugify(
+    animeData.dic_title || animeData.title_en_normalized || ""
+  );
   const currentSlug = decodeURIComponent(slug);
 
   if (expectedSlug && currentSlug !== expectedSlug) {
@@ -75,11 +89,15 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
 
   // Process Related and Similar items (Derived from animeData)
   const relatedItems: MediaItem[] = Array.isArray(animeData.related_anime)
-    ? (animeData.related_anime as unknown as RelatedAnimeJson[]).map(mapJsonToMediaItem)
+    ? (animeData.related_anime as unknown as RelatedAnimeJson[]).map(
+        mapJsonToMediaItem
+      )
     : [];
 
   const similarItems: MediaItem[] = Array.isArray(animeData.recommendations)
-    ? (animeData.recommendations as unknown as RelatedAnimeJson[]).map(mapJsonToMediaItem)
+    ? (animeData.recommendations as unknown as RelatedAnimeJson[]).map(
+        mapJsonToMediaItem
+      )
     : [];
 
   const tabs: TabItem[] = [
@@ -104,7 +122,9 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     {
       value: "trailer",
       label: "تریلر",
-      content: <div className="text-center text-slate-400">محتوای بخش تریلر</div>,
+      content: (
+        <div className="text-center text-slate-400">محتوای بخش تریلر</div>
+      ),
     },
     {
       value: "related",
