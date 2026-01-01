@@ -1,7 +1,8 @@
-
-
 import Popular from "@/components/homepage/Popular";
 import Seasonal from "@/components/homepage/Seasonal";
+import Latest from "@/components/homepage/Latest";
+import Action from "@/components/homepage/Action";
+import Movies from "@/components/homepage/Movies";
 import SliderContainer from "@/components/slider/SliderContainer";
 import { Suspense } from "react";
 import { SliderSkeleton } from "@/components/slider/SliderSkeleton";
@@ -21,6 +22,15 @@ export default function Home() {
       </Suspense>
       <Suspense fallback={<CarouselSkeleton />}>
         <Popular />
+      </Suspense>
+      <Suspense fallback={<CarouselSkeleton />}>
+        <Latest />
+      </Suspense>
+      <Suspense fallback={<CarouselSkeleton />}>
+        <Action />
+      </Suspense>
+      <Suspense fallback={<CarouselSkeleton />}>
+        <Movies />
       </Suspense>
       
       <div className="border-foreground/80 hidden h-px flex-1 border-t border-dashed sm:block" />
