@@ -16,6 +16,7 @@ export interface DownloadItem {
   resolution?: string;
   episode: number;
   thumbnail?: string;
+  subinfo?: string;
 }
 
 const EpisodeContainer = ({ item }: { item: DownloadItem }) => {
@@ -43,14 +44,22 @@ const EpisodeContainer = ({ item }: { item: DownloadItem }) => {
       } else {
         throw new Error("Link not found in response");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error getting download link:", error);
-      let message =
-        error?.context?.statusText ||
-        error?.message ||
-        "خطا در دریافت لینک دانلود";
+      let message = "خطا در دریافت لینک دانلود";
+      let status: number | undefined;
 
-      if (error?.context?.status === 429 || error?.status === 429) {
+      if (typeof error === "object" && error !== null) {
+        const err = error as {
+          message?: string;
+          status?: number;
+          context?: { status?: number; statusText?: string };
+        };
+        message = err.context?.statusText || err.message || message;
+        status = err.context?.status || err.status;
+      }
+
+      if (status === 429) {
         message = "شما به محدودیت دانلود رسیده‌اید";
       }
 
@@ -87,6 +96,11 @@ const EpisodeContainer = ({ item }: { item: DownloadItem }) => {
 
       {/* Top Badges */}
       <div className="absolute top-4 left-4 z-20 flex gap-2">
+        {item.subinfo === "softsub" && (
+          <span className="bg-background/80 text-foreground group-hover:bg-primary/80 group-hover:text-primary-foreground rounded-full px-3 py-1 text-xs font-medium backdrop-blur-md transition-all duration-300">
+            سافت ساب
+          </span>
+        )}
         <span className="bg-background/80 text-foreground group-hover:bg-primary/80 group-hover:text-primary-foreground rounded-full px-3 py-1 text-xs font-medium backdrop-blur-md transition-all duration-300">
           {item.resolution}
         </span>

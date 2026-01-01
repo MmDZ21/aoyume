@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { DownloadBox, DownloadItem } from "./DownloadBox";
 import { QualitySelector } from "./QualitySelector";
 import { EpisodesList } from "@/types/anime";
@@ -50,11 +50,36 @@ export function DownloadContainer({
   );
 
   // Update selected quality if available qualities change (e.g. data load)
-  useEffect(() => {
-    if (availableQualities.length > 0 && !availableQualities.includes(selectedQuality)) {
-      setSelectedQuality(availableQualities[availableQualities.length - 1]);
-    }
-  }, [availableQualities, selectedQuality]);
+  // We do this during render to avoid cascading updates
+  if (availableQualities.length > 0 && !availableQualities.includes(selectedQuality)) {
+    const newQuality = availableQualities[availableQualities.length - 1];
+    setSelectedQuality(newQuality);
+  }
+
+  // If episodes data is provided, use it
+  const mappedItems = useMemo(() => {
+    if (!episodes || episodes.length === 0) return [];
+    
+    const selectedGroup = episodes.find((g) => g.quality === selectedQuality);
+    
+    const items: DownloadItem[] = selectedGroup
+      ? selectedGroup.episodes
+          .filter((ep) => ep.direct_link_status === "uploaded")
+          .map((ep) => ({
+            id: ep.id,
+            quality: ep.quality,
+            size: ep.size,
+            link: ep.direct_link,
+            resolution: ep.quality,
+            episode: ep.episode_number,
+            thumbnail: ep.thumbnail,
+            subinfo: ep.subinfo,
+          }))
+      : [];
+
+    // Sort by episode number
+    return items.sort((a, b) => a.episode - b.episode);
+  }, [episodes, selectedQuality]);
 
   // If user is not logged in, show unauthenticated message
   if (!hasAccess) {
@@ -80,30 +105,6 @@ export function DownloadContainer({
       </div>
     );
   }
-
-  // If episodes data is provided, use it
-  const mappedItems = useMemo(() => {
-    if (!episodes || episodes.length === 0) return [];
-    
-    const selectedGroup = episodes.find((g) => g.quality === selectedQuality);
-    
-    const items: DownloadItem[] = selectedGroup
-      ? selectedGroup.episodes
-          .filter((ep) => ep.direct_link_status === "uploaded")
-          .map((ep) => ({
-            id: ep.id,
-            quality: ep.quality,
-            size: ep.size,
-            link: ep.direct_link,
-            resolution: ep.quality,
-            episode: ep.episode_number,
-            thumbnail: ep.thumbnail,
-          }))
-      : [];
-
-    // Sort by episode number
-    return items.sort((a, b) => a.episode - b.episode);
-  }, [episodes, selectedQuality]);
 
   if (episodes && episodes.length > 0) {
 
