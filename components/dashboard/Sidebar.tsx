@@ -14,8 +14,11 @@ import {
   User,
   Crown,
   ShieldCheck,
+  type LucideIcon,
 } from "lucide-react";
 import { cn, type UserRole } from "@/lib/utils";
+import { type User as SupabaseUser } from "@supabase/supabase-js";
+import { type Database } from "@/types/database.types";
 import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -25,9 +28,11 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 // ...
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+
 interface SidebarProps {
-  user: any;
-  profile?: any;
+  user: SupabaseUser;
+  profile?: Profile | null;
   role: UserRole;
 }
 
@@ -40,31 +45,31 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
   const canModerate = ["admin", "moderator"].includes(role);
 
   // Local state for avatar to support immediate updates
-  const initialAvatar = profile?.avatar || user?.user_metadata?.avatar_url;
-  const [avatarUrl, setAvatarUrl] = useState(initialAvatar);
+  const propAvatar = profile?.avatar || user?.user_metadata?.avatar_url;
+  const [avatarUrl, setAvatarUrl] = useState(propAvatar);
 
-  // Sync with props when they change (e.g. on navigation or refresh)
-  useEffect(() => {
-    const propAvatar = profile?.avatar || user?.user_metadata?.avatar_url;
+  // Track previous prop to sync state during render (avoids useEffect)
+  const [prevPropAvatar, setPrevPropAvatar] = useState(propAvatar);
 
-    setAvatarUrl((currentUrl: any) => {
-      if (!currentUrl) return propAvatar;
-      if (!propAvatar) return null;
+  if (propAvatar !== prevPropAvatar) {
+    setPrevPropAvatar(propAvatar);
 
-      // Extract base URLs (remove query params) to compare
-      const currentBase = currentUrl.split("?")[0];
+    let shouldUpdate = true;
+    if (avatarUrl && propAvatar) {
+      const currentBase = avatarUrl.split("?")[0];
       const propBase = propAvatar.split("?")[0];
 
       // If the base URLs match, and the current URL has a query param (implying it's a cache-busted version we set locally),
       // we want to keep the current URL to prevent reverting to the cached version.
-      if (currentBase === propBase && currentUrl.includes("?t=")) {
-        return currentUrl;
+      if (currentBase === propBase && avatarUrl.includes("?t=")) {
+        shouldUpdate = false;
       }
+    }
 
-      // Otherwise (different URL, or no local cache bust), use the prop
-      return propAvatar;
-    });
-  }, [profile, user]);
+    if (shouldUpdate) {
+      setAvatarUrl(propAvatar);
+    }
+  }
 
   // Listen for custom event to update avatar immediately
   useEffect(() => {
@@ -120,7 +125,11 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
     },
   ];
 
-  const bottomItems = [
+  const bottomItems: {
+    title: string;
+    href: string;
+    icon: LucideIcon;
+  }[] = [
     // {
     //   title: "اطلاعیه ها",
     //   href: "/dashboard/notifications",
@@ -143,7 +152,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
               className={cn(
                 "absolute -inset-1 rounded-full opacity-70 blur-md transition-all duration-500",
                 isVip
-                  ? "bg-linear-to-br from-chart-5/60 to-chart-5"
+                  ? "from-chart-5/60 to-chart-5 bg-linear-to-br"
                   : "from-primary/40 to-primary/10 bg-linear-to-br"
               )}
             />
@@ -154,7 +163,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
               </AvatarFallback>
             </Avatar>
             {isVip && (
-              <div className="border-background absolute -top-1 -right-1 rounded-full border-2 bg-chart-5 p-1 text-primary-foreground shadow-lg">
+              <div className="border-background bg-chart-5 text-primary-foreground absolute -top-1 -right-1 rounded-full border-2 p-1 shadow-lg">
                 <Crown className="h-3 w-3 fill-current" />
               </div>
             )}
@@ -171,7 +180,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors",
                 isVip
-                  ? "border border-chart-5/20 bg-chart-5/10 text-chart-5"
+                  ? "border-chart-5/20 bg-chart-5/10 text-chart-5 border"
                   : "bg-muted text-muted-foreground"
               )}
             >
@@ -250,7 +259,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
           <CollapsibleTrigger asChild>
             <button className="text-muted-foreground hover:bg-accent hover:text-foreground group flex w-full items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200">
               <div className="flex items-center gap-3">
-                <Heart className="text-muted-foreground/70 h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:text-destructive" />
+                <Heart className="text-muted-foreground/70 group-hover:text-destructive h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
                 <span>لیست‌های من</span>
               </div>
               <ChevronDown
