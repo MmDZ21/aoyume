@@ -4,6 +4,7 @@ import MediaCard, { MediaItem } from "@/components/carousel/MediaCard";
 import { mapRowToMediaItem } from "@/lib/mappers";
 import { Metadata } from "next";
 import { Pagination } from "@/components/ui/pagination-control";
+import { getPaginatedAnimes } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "جستجوی پیشرفته | AoYume",
@@ -37,57 +38,16 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   const { data: genresData } = await supabase.rpc("get_all_genre");
   const genres = genresData || [];
 
-  // Build Query
-  let queryBuilder = supabase
-    .from("complete_anime_details_materialized")
-    .select("*", { count: "exact" })
-    .eq("post_status", 1);
-
-  if (genreParam !== "all") {
-    const selectedGenres = genreParam.split(",");
-    queryBuilder = queryBuilder.contains("genre_names_en", selectedGenres);
-  }
-
-  if (season !== "all") {
-    // Cast season to match Enum type, relying on user providing valid string via select
-    // or validating it against known values
-    const validSeasons = ["spring", "summer", "fall", "winter", "unknown"];
-    if (validSeasons.includes(season)) {
-       queryBuilder = queryBuilder.eq("season", season as any);
-    }
-  }
-
-  if (year) {
-    queryBuilder = queryBuilder.eq("seasonYear", year);
-  }
-
-  if (status !== "all") {
-    if (status === "airing") queryBuilder = queryBuilder.eq("dic_status", 1);
-    else if (status === "finished") queryBuilder = queryBuilder.eq("dic_status", 2);
-    else if (status === "not_aired") queryBuilder = queryBuilder.eq("dic_status", 3);
-  }
-
-  // Sorting
-  if (sort === "popular") {
-    queryBuilder = queryBuilder.order("post_hit", { ascending: false });
-  } else if (sort === "score") {
-    queryBuilder = queryBuilder.order("dic_rating", { ascending: false, nullsFirst: false });
-  } else {
-    // Default newest (created_at or updated_at or last_update)
-    // Using created_at based on typical needs, or last_update
-    queryBuilder = queryBuilder.order("created_at", { ascending: false });
-  }
-
-  // Pagination
-  const from = (currentPage - 1) * itemsPerPage;
-  const to = from + itemsPerPage - 1;
-  queryBuilder = queryBuilder.range(from, to);
-
-  const { data: animeList, error, count } = await queryBuilder;
-
-  if (error) {
-    console.error("Browse Error:", error);
-  }
+  // Fetch Animes
+  const { data: animeList, count } = await getPaginatedAnimes({
+    page: currentPage,
+    limit: itemsPerPage,
+    genre: genreParam,
+    season,
+    year,
+    status,
+    sort,
+  });
 
   const items: MediaItem[] = animeList ? animeList.map(mapRowToMediaItem) : [];
   const totalPages = count ? Math.ceil(count / itemsPerPage) : 0;

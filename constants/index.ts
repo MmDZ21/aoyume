@@ -95,27 +95,6 @@ export const bottombarNavItems: BottombarNavItem[] = [
     ]
   },
   {
-    label: "انیمه‌ها بر اساس فصل",
-    items: [
-      {
-        label: "بهار",
-        href: "/anime/season/spring",
-      },
-      {
-        label: "تابستان",
-        href: "/anime/season/summer",
-      },
-      {
-        label: "پاییز",
-        href: "/anime/season/fall",
-      },
-      {
-        label: "زمستان",
-        href: "/anime/season/winter",
-      },
-    ]
-  },
-  {
     label: "انیمه‌ها بر اساس وضعیت",
     items: [
       {
@@ -133,19 +112,23 @@ export const bottombarNavItems: BottombarNavItem[] = [
     ]
   },
   {
+    label: "انیمه‌های فصلی",
+    href: "/anime/seasonal",
+  },
+  {
     label: "انیمه‌های سینمایی",
     href: "/anime/movies",
   },
   {
-    label: "برنامه پخش هفتگی",
-    href: "/anime/schedule",
+    label: "همه انیمه‌ها",
+    href: "/anime",
   },
   {
     label: "برترین انیمه‌ها",
     href: "/anime/top",
   },
   {
-    label: "اخبار انیمه",
-    href: "/anime/news",
+    label: "جستجوی پیشرفته",
+    href: "/browse",
   },
 ]

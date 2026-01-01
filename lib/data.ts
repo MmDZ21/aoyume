@@ -4,6 +4,27 @@ import { AnilistResponse, EpisodesList, MalListResponse } from "@/types/anime";
 import { CommentWithReplies } from "@/types/comment";
 import { QueryData } from "@supabase/supabase-js";
 
+// Fetch current season and year
+export const getCurrentSeasonYear = cache(async () => {
+  const supabase = await createClient();
+  
+  // @ts-expect-error - RPC function might not be in generated types yet
+  const yearQuery = supabase.rpc("get_current_season_year");
+  const seasonQuery = supabase.rpc("get_current_season");
+
+  const [yearResult, seasonResult] = await Promise.all([yearQuery, seasonQuery]);
+  
+  if (yearResult.error || seasonResult.error) {
+    console.error("Supabase Error (Current Season/Year):", yearResult.error || seasonResult.error);
+    return { season: "unknown", year: new Date().getFullYear() };
+  }
+
+  const year = yearResult.data;
+  const season = seasonResult.data;
+
+  return { year, season };
+});
+
 // Data fetching function with cache control
 export const getAnimeDetails = cache(async (id: number) => {
   const supabase = await createClient();
@@ -120,6 +141,80 @@ export const getUserWatchlist = cache(async (userId: string) => {
     return [];
   }
   return data;
+});
+
+export const getPaginatedAnimes = cache(async (params: {
+  page?: number;
+  limit?: number;
+  genre?: string;
+  season?: string;
+  year?: number | null;
+  status?: string;
+  sort?: string;
+}) => {
+  const {
+    page = 1,
+    limit = 30,
+    genre = "all",
+    season = "all",
+    year = null,
+    status = "all",
+    sort = "newest",
+  } = params;
+
+  const supabase = await createClient();
+  
+  let queryBuilder = supabase
+    .from("complete_anime_details_materialized")
+    .select("*", { count: "exact" })
+    .eq("post_status", 1);
+
+  if (genre !== "all") {
+    const selectedGenres = genre.split(",");
+    queryBuilder = queryBuilder.contains("genre_names_en", selectedGenres);
+  }
+
+  if (season !== "all") {
+    const validSeasons = ["spring", "summer", "fall", "winter", "unknown"];
+    if (validSeasons.includes(season)) {
+       // @ts-expect-error - PostgREST filter type mismatch for custom enum
+       queryBuilder = queryBuilder.eq("season", season);
+    }
+  }
+
+  if (year) {
+    queryBuilder = queryBuilder.eq("seasonYear", year);
+  }
+
+  if (status !== "all") {
+    if (status === "airing") queryBuilder = queryBuilder.eq("dic_status", 1);
+    else if (status === "finished") queryBuilder = queryBuilder.eq("dic_status", 2);
+    else if (status === "not_aired") queryBuilder = queryBuilder.eq("dic_status", 3);
+  }
+
+  // Sorting
+  if (sort === "popular") {
+    queryBuilder = queryBuilder.order("post_hit", { ascending: false });
+  } else if (sort === "score") {
+    queryBuilder = queryBuilder.order("dic_rating", { ascending: false, nullsFirst: false });
+  } else {
+    // Default newest
+    queryBuilder = queryBuilder.order("created_at", { ascending: false });
+  }
+
+  // Pagination
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+  queryBuilder = queryBuilder.range(from, to);
+
+  const { data, error, count } = await queryBuilder;
+
+  if (error) {
+    console.error("Browse Error:", error);
+    return { data: [], count: 0 };
+  }
+
+  return { data, count };
 });
 
 export const getAnimeComments = cache(async (animeId: number, page: number = 1, limit: number = 10) => {
