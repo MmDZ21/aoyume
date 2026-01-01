@@ -10,17 +10,17 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 
-export function SimpleSort() {
+export function SimpleSort({ defaultValue = "newest" }: { defaultValue?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const currentSort = searchParams.get("sort") || "newest";
+  const currentSort = searchParams.get("sort") || defaultValue;
 
   const handleSortChange = (value: string) => {
     startTransition(() => {
       const params = new URLSearchParams(searchParams.toString());
-      if (value === "newest") {
+      if (value === defaultValue) {
         params.delete("sort");
       } else {
         params.set("sort", value);
