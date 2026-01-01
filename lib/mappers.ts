@@ -12,6 +12,7 @@ export interface RelatedAnimeJson {
   small_image: string;
   relation_type?: string;
   dic_image_url: string;
+  dic_kayfet?: string;
 }
 
 export function mapJsonToMediaItem(item: RelatedAnimeJson): MediaItem {
@@ -25,6 +26,7 @@ export function mapJsonToMediaItem(item: RelatedAnimeJson): MediaItem {
     year: 0,
     duration: item.episodes_en ? `${item.episodes_en} قسمت` : "",
     description: item.relation_type || "",
+    quality: item.dic_kayfet,
   };
 }
 
@@ -46,6 +48,7 @@ export function mapRowToMediaItem(item: AnimeDetailsRow | SeasonalRow): MediaIte
     year: year,
     duration: item.duration_en || item.duration_fa || "24m",
     description: item.summary_fa || item.summary_en || "",
+    quality: item.dic_kayfet,
   };
 }
 
@@ -73,5 +76,6 @@ export function mapSearchSummaryToMediaItem(item: SearchSummaryRow): MediaItem {
     year: 0, // Not available in summary
     duration: item.episodes_en ? `${item.episodes_en} قسمت` : "",
     description: "", // Not available in summary
+    quality: item.dic_kayfet,
   };
 }

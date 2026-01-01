@@ -25,8 +25,9 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
     : (anime.genre_names_en || []).map((g) => ({ name: g, slug: g }));
   const malLink = anime.mal_id ? `https://myanimelist.net/anime/${anime.mal_id}` : null;
   const latestUpdate = anime.last_update || "نامشخص";
-  const score = anime.dic_rating || 0;
-  const malScore = anime.dic_score ? parseFloat(anime.dic_score) : 0;
+  const score = anime.dic_score || 0;
+  const scoredBy = anime.dic_scored_by || "0";
+  const anilistScore = anime.dic_rating || 0;
   const season = translateSeason(anime.season);
   const seasonYear = anime.seasonYear;
   const episodesRaw = anime.episodes_en || anime.episodes_fa;
@@ -141,19 +142,30 @@ export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
                     </span>
                   </Link>
                 ))}
+                {anime.dic_kayfet === "SoftSub" && (
+                  <span className={cn(buttonVariants({ variant: "outline" }))}>
+                    سافت ساب
+                  </span>
+                )}
               </div>
 
               <div className="grid w-full max-w-md mx-auto sm:mx-0 grid-cols-1 gap-y-4 sm:gap-y-8 text-sm">
                 <div className="flex items-center justify-between gap-4">
                   <span>امتیاز AoYume :</span>
-                  <span className="font-medium">
-                    <span className="font-bold text-chart-5">{score}</span> از 10
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-muted-foreground text-xs">
+                      ({scoredBy} رای)
+                    </span>
+                    <span className="font-medium">
+                      <span className="font-bold text-chart-5">{score}</span> از
+                      10
+                    </span>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between gap-4">
-                  <span>امتیاز MyAnimeList :</span>
+                  <span>امتیاز Anilist :</span>
                   <span className="font-medium">
-                    <span className="font-bold text-chart-5">{malScore}</span> از 10
+                    <span className="font-bold text-chart-5">{anilistScore}</span> از 10
                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-4">

@@ -43,7 +43,7 @@ const Popular = async () => {
   return (
     <MediaCarousel
       title="محبوب ترین ها"
-      link="/anime/popular"
+      link="/browse?sort=popular"
       items={items}
     />
   );

@@ -18,6 +18,7 @@ export interface MediaItem {
   year: number;
   duration: string;
   description: string;
+  quality?: string | null;
 }
 
 const MediaCard = ({ item }: { item: MediaItem }) => {
@@ -86,9 +87,11 @@ const MediaCard = ({ item }: { item: MediaItem }) => {
               <Clock className="size-3" />
               {item.duration}
             </div>
-            <div className="rounded border border-border px-1.5 py-0.5 text-[10px] uppercase">
-              HD
-            </div>
+            {item.quality === "SoftSub" && (
+              <div className="rounded border border-border px-1.5 py-0.5 text-[10px] uppercase">
+                سافت ساب
+              </div>
+            )}
           </div>
 
           <div className="line-clamp-4 text-sm leading-relaxed text-muted-foreground">
