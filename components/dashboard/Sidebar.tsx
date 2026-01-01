@@ -102,12 +102,12 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
           },
         ]
       : []),
-    {
-      title: "اشتراک ویژه",
-      href: "/dashboard/subscription",
-      icon: Crown,
-      variant: "vip",
-    },
+    // {
+    //   title: "اشتراک ویژه",
+    //   href: "/dashboard/subscription",
+    //   icon: Crown,
+    //   variant: "vip",
+    // },
     {
       title: "تنظیمات",
       href: "/dashboard/settings",
@@ -121,11 +121,11 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
   ];
 
   const bottomItems = [
-    {
-      title: "اطلاعیه ها",
-      href: "/dashboard/notifications",
-      icon: Bell,
-    },
+    // {
+    //   title: "اطلاعیه ها",
+    //   href: "/dashboard/notifications",
+    //   icon: Bell,
+    // },
   ];
 
   const isActive = (path: string) => pathname === path;
@@ -273,11 +273,11 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
                 )}
               >
                 <span>انیمه‌های من</span>
-                <span className="bg-muted/80 min-w-[24px] rounded-md px-1.5 py-0.5 text-center text-[10px]">
+                {/* <span className="bg-muted/80 min-w-[24px] rounded-md px-1.5 py-0.5 text-center text-[10px]">
                   234
-                </span>
+                </span> */}
               </Link>
-              <Link
+              {/* <Link
                 href="/dashboard/lists/movies"
                 className={cn(
                   "flex items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors",
@@ -290,7 +290,7 @@ export function Sidebar({ user, profile, role }: SidebarProps) {
                 <span className="bg-muted/80 min-w-[24px] rounded-md px-1.5 py-0.5 text-center text-[10px]">
                   845
                 </span>
-              </Link>
+              </Link> */}
             </div>
           </CollapsibleContent>
         </Collapsible>

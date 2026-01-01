@@ -11,7 +11,26 @@ const SignInButton = async () => {
   } = await supabase.auth.getUser();
 
   if (user) {
-    return <UserMenu user={user} />;
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("name, avatar")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const { data: userRole } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    return (
+      <UserMenu
+        user={user}
+        name={profile?.name}
+        avatar={profile?.avatar}
+        role={userRole?.role}
+      />
+    );
   }
 
   return (

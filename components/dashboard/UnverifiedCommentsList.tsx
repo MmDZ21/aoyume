@@ -89,7 +89,7 @@ export function UnverifiedCommentsList({
   return (
     <div className="grid gap-4">
       {comments.map((comment) => (
-        <Card key={comment.id} className="overflow-hidden transition-all hover:shadow-md">
+        <Card key={comment.id} className="overflow-hidden transition-all hover:shadow-md pt-0">
           <CardHeader className="flex flex-row items-start gap-4 space-y-0 p-4 bg-muted/30">
             <Avatar className="h-10 w-10 border border-background">
               <AvatarImage src={comment.profiles?.avatar} />

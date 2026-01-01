@@ -62,7 +62,7 @@ export default async function CommentsPage(props: {
   const totalPages = count ? Math.ceil(count / limit) : 1;
 
   // Transform data to match component interface
-  const formattedComments = (comments || []).map((c: any) => ({
+  const formattedComments = (comments || []).map((c) => ({
     ...c,
     animes: c.animes
       ? {
