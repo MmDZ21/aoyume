@@ -69,10 +69,10 @@ export function DownloadContainer({
             id: ep.id,
             quality: ep.quality,
             size: ep.size,
-            link: ep.direct_link,
+            link: ep.direct_link ?? "",
             resolution: ep.quality,
-            episode: ep.episode_number,
-            thumbnail: ep.thumbnail,
+            episode: ep.number,
+            thumbnail: ep.thumbnail ?? undefined,
             subinfo: ep.subinfo,
           }))
       : [];
