@@ -8,7 +8,6 @@ import { QueryData } from "@supabase/supabase-js";
 export const getCurrentSeasonYear = cache(async () => {
   const supabase = await createClient();
   
-  // @ts-expect-error - RPC function might not be in generated types yet
   const yearQuery = supabase.rpc("get_current_season_year");
   const seasonQuery = supabase.rpc("get_current_season");
 
@@ -42,36 +41,72 @@ export const getAnimeDetails = cache(async (id: number) => {
   return data;
 });
 
-// Fetch episodes using RPC
+// Fetch episodes manually from table to bypass RPC limitations
 export const getAnimeEpisodes = cache(async (id: number) => {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("get_episodes_grouped_by_quality", {
-    anime_id_param: id,
-  });
+  
+  // Fetch raw episodes from the table
+  const { data: rawEpisodes, error } = await supabase
+    .from("episodes")
+    .select("*")
+    .eq("anime_id", id)
+    .order("number", { ascending: true });
 
   if (error) {
-    console.error("Supabase Error (Episodes):", error);
+    console.error("Supabase Error (Episodes Table):", error);
     return [];
   }
 
-  // Handle null data - RPC might return null if no episodes found or access denied
-  if (!data) {
+  if (!rawEpisodes) {
     return [];
   }
 
+    // console.log("Raw Episodes Data:", JSON.stringify(rawEpisodes[0], null, 2));
+
+  // Group by quality manually
   const imageBaseUrl = process.env.IMAGE_URL || "";
-  const episodesList = data as unknown as EpisodesList;
+  const groupedEpisodes: Record<string, typeof rawEpisodes> = {};
 
-  // Prepend IMAGE_URL to thumbnails since client components can't access process.env.IMAGE_URL
-  const episodesWithImages = episodesList.map((group) => ({
-    ...group,
-    episodes: group.episodes.map((episode) => ({
-      ...episode,
-      thumbnail: episode.thumbnail ? `${imageBaseUrl}${episode.thumbnail}` : episode.thumbnail,
-    })),
+  rawEpisodes.forEach((episode) => {
+    const quality = episode.quality || "Unknown";
+    if (!groupedEpisodes[quality]) {
+      groupedEpisodes[quality] = [];
+    }
+    groupedEpisodes[quality].push(episode);
+  });
+
+  // Convert to EpisodesList format
+  const episodesList: EpisodesList = Object.entries(groupedEpisodes).map(([quality, episodes]) => ({
+    quality,
+    episodes: episodes.map((ep) => {
+        // Handle subtitles: if it's a string (stringified JSON), parse it.
+        let parsedSubtitles = ep.subtitles;
+        if (typeof parsedSubtitles === 'string') {
+            try {
+                parsedSubtitles = JSON.parse(parsedSubtitles);
+            } catch (e) {
+                console.error("Failed to parse subtitles JSON:", e);
+                parsedSubtitles = null;
+            }
+        }
+
+        return {
+            ...ep,
+            // Ensure properties match Episode interface
+            number: ep.number, 
+            thumbnail: ep.thumbnail ? `${imageBaseUrl}${ep.thumbnail}` : null,
+            subtitles: parsedSubtitles as { url: string; lang: string }[] | null, // Cast JSON to correct type
+            // Provide defaults for missing fields if needed, or rely on TS interface matching
+            direct_link_status: ep.direct_link_status as "uploaded" | "pending" | "failed" | "never",
+        };
+    }),
   }));
 
-  return episodesWithImages;
+  // Sort groups by quality (optional, e.g., 1080p -> 720p -> 480p)
+  // Simple alphanumeric sort for now
+  episodesList.sort((a, b) => b.quality.localeCompare(a.quality, undefined, { numeric: true }));
+
+  return episodesList;
 });
 
 export const getALAnimeList = cache(async (username: string) => {

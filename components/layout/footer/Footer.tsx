@@ -27,22 +27,22 @@ const AppleIcon = () => (
 
 const Footer = () => {
   const accessLinks = [
-    "عنوان نمایشی",
-    "عنوان نمایشی",
-    "عنوان نمایشی",
-    "عنوان نمایشی",
+    { label: "صفحه اصلی", href: "/" },
+    { label: "همه انیمه‌ها", href: "/anime" },
+    { label: "جستجوی پیشرفته", href: "/browse" },
+    { label: "برترین انیمه‌ها", href: "/anime/top" },
   ];
   const categoryLinks = [
-    "عنوان نمایشی",
-    "عنوان نمایشی",
-    "عنوان نمایشی",
-    "عنوان نمایشی",
+    { label: "انیمه‌های فصلی", href: "/anime/seasonal" },
+    { label: "انیمه‌های سینمایی", href: "/anime/movies" },
+    { label: "در حال پخش", href: "/anime/status/ongoing" },
+    { label: "پایان یافته", href: "/anime/status/completed" },
   ];
   const importantLinks = [
-    "عنوان نمایشی",
-    "عنوان نمایشی",
-    "عنوان نمایشی",
-    "عنوان نمایشی",
+    { label: "تماس با ما", href: "/contact" },
+    { label: "تبلیغات", href: "/ads" },
+    { label: "خرید اشتراک", href: "/subscribe" },
+    { label: "داشبورد", href: "/dashboard" },
   ];
 
   return (
@@ -54,12 +54,14 @@ const Footer = () => {
             <h3 className="mb-6 text-lg font-bold">دسترسی ها</h3>
             <ul className="space-y-4">
               {accessLinks.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex cursor-pointer items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-                >
-                  <span className="inline-block h-2 w-2 rounded-full bg-primary" />
-                  {item}
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -70,12 +72,14 @@ const Footer = () => {
             <h3 className="mb-6 text-lg font-bold">دسته بندی ها</h3>
             <ul className="space-y-4">
               {categoryLinks.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex cursor-pointer items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-                >
-                  <span className="inline-block h-2 w-2 rounded-full bg-primary" />
-                  {item}
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -86,12 +90,14 @@ const Footer = () => {
             <h3 className="mb-6 text-lg font-bold">لینک های مهم</h3>
             <ul className="space-y-4">
               {importantLinks.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex cursor-pointer items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-                >
-                  <span className="inline-block h-2 w-2 rounded-full bg-primary" />
-                  {item}
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -104,13 +110,13 @@ const Footer = () => {
           {/* About Column */}
           <div className="md:col-span-6">
             <h3 className="mb-6 text-right text-lg font-bold">
-              درباره انیمه لیست
+              درباره آئویومه
             </h3>
             <p className="mb-8 text-justify leading-relaxed text-muted-foreground">
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
-              استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
-              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد
-              نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.
+              آئویومه یک آرشیو عظیم و رایگان برای دانلود انیمه است که با مجموعه‌ای گسترده از
+              انیمه‌های محبوب و کلاسیک، تجربه‌ای بی‌نظیر را برای علاقه‌مندان به انیمه فراهم می‌کند.
+              با دسترسی به هزاران عنوان انیمه در کیفیت‌های مختلف، امکان تماشای آنلاین و دانلود
+              سریع، آئویومه به عنوان یکی از بزرگترین منابع دانلود رایگان انیمه در خدمت شماست.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -147,7 +153,7 @@ const Footer = () => {
         <div className="flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
           {/* Copyright (Right side in RTL start) */}
           <p className="text-center text-sm text-muted-foreground md:text-right">
-            کلیه حقوق مادی و معنوی این وب سایت برای انیمه لیست محفوظ است
+            کلیه حقوق مادی و معنوی این وب سایت برای آئویومه محفوظ است
           </p>
 
           {/* Social Icons (Left side in RTL end) */}

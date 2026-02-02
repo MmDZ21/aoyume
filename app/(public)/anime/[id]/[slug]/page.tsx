@@ -14,7 +14,9 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import { slugify } from "@/lib/utils";
 import { mapJsonToMediaItem, RelatedAnimeJson } from "@/lib/mappers";
-import { getAnimeDetails } from "@/lib/data";
+import { getAnimeDetails, getAnimeEpisodes } from "@/lib/data";
+import PlayerWrapper from "@/components/anime/PlayerWrapper";
+
 
 // Reusable tab content wrapper
 const TabContent = ({
@@ -77,6 +79,9 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
 
   if (!animeData) notFound();
 
+  // Fetch episodes for OnlinePlayer
+  const episodes = await getAnimeEpisodes(animeId);
+
   // Validate Slug for SEO (Canonical URL)
   const expectedSlug = slugify(
     animeData.dic_title || animeData.title_en_normalized || ""
@@ -90,14 +95,14 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
   // Process Related and Similar items (Derived from animeData)
   const relatedItems: MediaItem[] = Array.isArray(animeData.related_anime)
     ? (animeData.related_anime as unknown as RelatedAnimeJson[]).map(
-        mapJsonToMediaItem
-      )
+      mapJsonToMediaItem
+    )
     : [];
 
   const similarItems: MediaItem[] = Array.isArray(animeData.recommendations)
     ? (animeData.recommendations as unknown as RelatedAnimeJson[]).map(
-        mapJsonToMediaItem
-      )
+      mapJsonToMediaItem
+    )
     : [];
 
   const tabs: TabItem[] = [
@@ -108,6 +113,15 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
         <Suspense fallback={<DownloadSectionSkeleton />}>
           <AsyncDownloadSection animeId={animeId} hasAccess={!!user} />
         </Suspense>
+      ),
+    },
+    {
+      value: "watch",
+      label: "پخش آنلاین",
+      content: (
+        <TabContent title="تماشای آنلاین">
+          <PlayerWrapper episodes={episodes} />
+        </TabContent>
       ),
     },
     {

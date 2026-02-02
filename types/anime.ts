@@ -23,15 +23,19 @@ export interface AnimeDetails {
 export interface Episode {
   id: number;
   anime_id: number;
-  episode_number: number;
+  number: number;
   quality: string;
   created_at: string;
-  thumbnail: string;
+  thumbnail: string | null;
   size: string;
-  link: string;
-  direct_link: string;
+  new_link: string | null;
+  new_backup: string | null;
+  direct_link: string | null;
   subinfo: string;
-  direct_link_status: "uploaded" | "pending" | "failed";
+  direct_link_status: "uploaded" | "pending" | "failed" | "never";
+  subtitle: string | null;
+  subtitles: { url: string; lang: string }[] | null;
+  al_id: string | null;
 }
 
 export interface QualityGroup {
