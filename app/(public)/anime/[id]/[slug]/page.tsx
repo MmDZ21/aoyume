@@ -14,8 +14,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import { slugify } from "@/lib/utils";
 import { mapJsonToMediaItem, RelatedAnimeJson } from "@/lib/mappers";
-import { getAnimeDetails, getAnimeEpisodes } from "@/lib/data";
-import PlayerWrapper from "@/components/anime/PlayerWrapper";
+import { getAnimeDetails } from "@/lib/data";
 
 
 // Reusable tab content wrapper
@@ -73,14 +72,14 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const { data: sessionData } = await supabase.auth.getSession();
+  const accessToken = sessionData?.session?.access_token ?? "";
+  const refreshToken = sessionData?.session?.refresh_token ?? "";
 
   // Fetch critical data (Details) - Blocking for SEO/Redirect
   const animeData = await getAnimeDetails(animeId);
 
   if (!animeData) notFound();
-
-  // Fetch episodes for OnlinePlayer
-  const episodes = await getAnimeEpisodes(animeId);
 
   // Validate Slug for SEO (Canonical URL)
   const expectedSlug = slugify(
@@ -91,6 +90,18 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
   if (expectedSlug && currentSlug !== expectedSlug) {
     redirect(`/anime/${id}/${expectedSlug}`);
   }
+
+  const playerBaseUrl =
+    process.env.NEXT_PUBLIC_PLAYER_APP_URL ?? "https://player.example.com";
+  const normalizedPlayerBaseUrl = playerBaseUrl.replace(/\/$/, "");
+  const watchSlug = expectedSlug || currentSlug || "anime";
+  const watchUrlBase = `${normalizedPlayerBaseUrl}/watch/${animeId}/${watchSlug}`;
+  const watchUrl =
+    accessToken && refreshToken
+      ? `${watchUrlBase}?access_token=${encodeURIComponent(
+          accessToken
+        )}&refresh_token=${encodeURIComponent(refreshToken)}`
+      : watchUrlBase;
 
   // Process Related and Similar items (Derived from animeData)
   const relatedItems: MediaItem[] = Array.isArray(animeData.related_anime)
@@ -118,11 +129,9 @@ export default async function AnimeDetailsPage({ params }: PageProps) {
     {
       value: "watch",
       label: "پخش آنلاین",
-      content: (
-        <TabContent title="تماشای آنلاین">
-          <PlayerWrapper episodes={episodes} />
-        </TabContent>
-      ),
+      content: null,
+      href: watchUrl,
+      openInNewTab: true,
     },
     {
       value: "details",

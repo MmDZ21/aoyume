@@ -17,6 +17,7 @@ interface AnimeDetailsProps {
 export function AnimeDetails({ anime, className }: AnimeDetailsProps) {
   const coverImage = process.env.IMAGE_URL + (anime.wide_image || anime.dic_image_url || anime.mal_image_url || "/images/placeholder.jpg");
   const posterImage = process.env.IMAGE_URL + (anime.dic_image_url || anime.mal_image_url || "/images/placeholder.jpg");
+  console.log(posterImage);
   const title = anime.dic_title || anime.title_en_normalized || "Unknown Title";
   const genres = Array.isArray(anime.genres)
     ? (anime.genres as unknown as { name_fa?: string; name_en?: string }[])

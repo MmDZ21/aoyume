@@ -8,6 +8,8 @@ export interface TabItem {
   value: string;
   label: React.ReactNode;
   content: React.ReactNode;
+  href?: string;
+  openInNewTab?: boolean;
 }
 
 interface ReusableTabsProps {
@@ -29,6 +31,8 @@ export function ReusableTabs({
   contentClassName,
   dir = "rtl",
 }: ReusableTabsProps) {
+  const contentTabs = tabs.filter((tab) => !tab.href);
+
   return (
     <Tabs
       defaultValue={defaultValue}
@@ -41,21 +45,35 @@ export function ReusableTabs({
           listClassName
         )}
       >
-        {tabs.map((tab) => (
-          <TabsTrigger
-            key={tab.value}
-            value={tab.value}
-            className={cn(
-              "hover:bg-primary/20 dark:hover:bg-primary/40 data-[state=active]:border-primary data-[state=active]:bg-primary dark:data-[state=active]:border-primary dark:data-[state=active]:bg-primary bg-primary/5 dark:bg-primary/20 text-muted-foreground dark:text-muted-foreground border-primary/10 dark:border-primary/30 cursor-pointer rounded-2xl border py-3 text-center transition-all hover:text-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg dark:hover:text-primary dark:data-[state=active]:text-primary-foreground dark:data-[state=active]:shadow-lg md:text-left",
-              "w-full md:w-auto",
-              triggerClassName
-            )}
-          >
-            {tab.label}
-          </TabsTrigger>
-        ))}
+        {tabs.map((tab) => {
+          const classes = cn(
+            "inline-flex flex-1 items-center justify-center whitespace-nowrap px-4 text-sm font-medium hover:bg-primary/20 dark:hover:bg-primary/40 data-[state=active]:border-primary data-[state=active]:bg-primary dark:data-[state=active]:border-primary dark:data-[state=active]:bg-primary bg-primary/5 dark:bg-primary/20 text-muted-foreground dark:text-muted-foreground border-primary/10 dark:border-primary/30 cursor-pointer rounded-2xl border py-3 text-center transition-all hover:text-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg dark:hover:text-primary dark:data-[state=active]:text-primary-foreground dark:data-[state=active]:shadow-lg md:text-left",
+            "w-full md:w-auto",
+            triggerClassName
+          );
+
+          if (tab.href) {
+            return (
+              <a
+                key={tab.value}
+                href={tab.href}
+                className={classes}
+                target={tab.openInNewTab ? "_blank" : undefined}
+                rel={tab.openInNewTab ? "noreferrer noopener" : undefined}
+              >
+                {tab.label}
+              </a>
+            );
+          }
+
+          return (
+            <TabsTrigger key={tab.value} value={tab.value} className={classes}>
+              {tab.label}
+            </TabsTrigger>
+          );
+        })}
       </TabsList>
-      {tabs.map((tab) => (
+      {contentTabs.map((tab) => (
         <TabsContent
           key={tab.value}
           value={tab.value}
